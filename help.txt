@@ -1,0 +1,282 @@
+NodeJS supervisor热更新
+浏览： 877次　日期：2018年06月27日 19:40:40　作者：青格勒
+NodeJS项目在本地环境做的时候总会遇到每次写点代码或者引入文件的时候需要重新启动项目，这样每次都启动会耗费很多的时间，这样做其实很不符合快速开发的本意。
+ 
+尤其是改完一段代码之后没有重启，刷新之后代码没有起效，然后就盲目的找BUG是最费时间的，我就是每次都写好代码，然后被旁边的人一打扰就忘记重新启动。
+ 
+今天我在做NodeJS项目的时候在群里面看到了《NodeJS supervisor》，然后发现这个确实时一个很好的利器。
+ 
+安装方法（Linux和Mac系前面带sudo）：
+npm i supervisor
+sudo npm i supervisor
+ 
+执行方法（app/ires是跳过这个文件）：
+//无忽略项启动
+supervisor app.js
+到这里你就可以使用了。
+ 
+如果出现：’supervisor’不是内部或外部命令，请把supervisor安装成全局的就可以
+npm install -g supervisor
+ 
+往下内容可以不看了，我也不知道是什么东西。
+supervisor的其他参数
+在命令行：
+supervisor -h
+获取supervisor的详细参数：
+01、-w|–watch <watchItems>  监视的文件（逗号分隔，默认全部）
+02、-i|–ignore <ignoreItems>  忽略更改的文件夹列表（逗号分隔，无默认值）
+03、–ignore-symlinks   启用符号链接时会忽略查找要监视的文件
+04、-p|–poll-interval <milliseconds>  轮询观看的文件以进行更改的频率（默认看nodejs）
+05、-e|–extensions <extensions>  除了默认值之外，还可以观看特定的文件扩展名（默认看nodejs）
+06、-x|–exec <executable>  运行指定程序的可执行文件（默认值node）
+07、–debug[=port]   启用debug
+08、–debug-brk[=port]   使用–debug-brk [= port]启动
+09、–harmony     使用–harmony启动
+10、–inspect     使用–inspect启动
+11、–harmony_default_parameters   使用–harmony_default_parameters启动
+12、-n|–no-restart-on error|exit   没看懂
+13、-t|–non-interactive
+14、-k|–instant-kill
+15、–force-watch
+16、-s|–timestamp   每次运行后记录日志时间戳，轻松分辨任务上次运行的时间。
+17、-h|–help|-?   显示说明书
+18、-q|–quiet     抑制DEBUG消息
+19、-V|–verbose  显示额外的DEBUG消息
+ 
+如果想设置上面的参数：
+supervisor -p '1200'
+这样就可以。
+
+
+Windows系统下nodejs安装及配置
+2013年10月14日 00:27:10 清枫草塘 阅读数：67250
+关于nodejs中文站，目前活跃度最好的知识站应该是http://www.cnodejs.org/ ，而http://cnodejs.org/则活跃度较低。Express.js是nodejs的一个MVC开发框架，并且支持jade等多种模板，是Node.js上最流行的Web开发框架。这几天刚接触PhoneGap，以前也看了一些nodejs的基础但苦于时间有限一直没机会亲自搭建一个nodejs环境，今天周末，部署了PhoneGap到Android，顺便一同搭建了一下nodejs本地环境，自己的操作步骤如下：
+
+第1步：下载、安装文件
+
+代开nodejs的官网http://www.nodejs.org/download/ 下载最新版本，下载完成之后，双击 node-v0.10.20-x86.msi，开始安装nodejs，默认是安装在C:\Program Files\nodejs目录。安装好后系统默认的环境变量path是C:\Documents and Settings\Administrator\Application Data\npm;可以根据需要手动指向本地安装目录，如：C:\Program Files\nodejs\node_modules\npm将全局目录设置设为本地初始默认安装目录一致。
+
+
+第2步：安装相关模块环境
+
+
+打开C:\Program Files\nodejs目录你会发现里面自带了Npm这个nodejs插件的管理工具,直接用Npm安装相关需要的相关模块即可（其他有些系统可能需要单独安装NPM下载地址https://github.com/isaacs/npm，也可直接用Git工具下载git clone --recursive git://github.com/isaacs/npm.git下载完成后，命令行首先定位到npm包所在目录，输入代码node cli.js install npm -gf 进行安装。）
+
+系统开始菜单--程序--进入node.js command prompt 命令窗口
+
+键入命令：cd C:\Program Files\nodejs 即可进入nodejs 安装目录 C:\Program Files\nodejs
+
+现在开始安装相关模块环境
+
+node模块的安装分为全局模式和本地模式。一般情况下会以本地模式运行，包会被安装到和你的应用代码统计的本地node_modules目录下。在全局模式下，Node包会被安装到Node的默认安装目录下的node_modules下。
+
+第一种方法是键入命令：npm install express 默认安装express的最新版本。若在后面加版本号可安装指定版本，如npm install express@3.0.6 回车开始安装express，安装完成后会在当前目录下的node_modules文件夹下多出express相关的两个文件夹express和.bin。
+
+另一种全局安装方式是键入命令：npm install express -g  ，安装完成命令行会提示 npm info ok。参数-g的含义是代表安装到全局环境里面。如果沒有-g的话会安装到当前node_modules目录下(如无则新建node_modules文件夹)。个人不建议初学者使用这种将包安装到全局环境中的做法，因为在js实例代码中，直接通过require()的方式是没有办法调用全局安装包的，报错 throw err;Error: Cannot find module 'express' ，此时可以将node_modules整个文件夹复制一份到你的项目工程下。全局的安装是供命令行使用的，使用全局方式安装后，用户就可以在命令行中直接运行该组件包支持的命令，好处是可以提高程序的重复利用程度，避免同样的内容存在多份副本。缺点是难以处理不同的版本依赖。这里的require()是node.js内置函数，用来引入其他模块以备代码中调用模块的函数和变量，默认下node.js会在NODE_PATH和目前js所在项目目录下的node_modules文件夹下去寻找模块。因此，如果是全局安装，不复制系统安装node_modules文件夹到项目node_modules文件夹下，还可以选择将环境变量的NODE_PATH设置为C:\Program Files\nodejs，设置完成后再去项目目录运行命令node app.js就不会报错了。express.js继承自connect模块，所以若你的node_modules文件夹下没有connect模块也是不能运行的。
+以上为本人的经验总结。后来查阅文档发现国外有更为详细的答复：
+援引Marek的问题Error: Cannot find module ‘express’的解答：
+
+This problems seems to be quite popular among Windows users. It seems to occur after node has been reinstalled or updated  or when hidden attribute has been removed from  C:\Users\IMaster\AppData folder.  It might be one of those things that can make you feel bad especially if you don’t wont to apply some quick hacks like:  npm link express
+
+Node returns error because is not able to find required module and that is why problem in most cases is actually easy to fix. First place to check would be require.paths. After typing it in node console I received:
+Error: require.paths is removed. Use node_modules folders, or the NODE_PATH environment variable instead.
+
+At the time of writing I am using v0.6.19 but you might see this or similar warning if you using newer version.
+
+As stated  you have 2 choices. You can install express (or another module) to local node_modules directory using npm install express or after installing module globally
+    
+npm install express -g
+
+you can link it with your current project using
+    
+npm link express
+
+Second and last option is to create or update  NODE_PATH system variable pointing your node to the right place in the system. If you are Windows user use export command as shown below:
+    
+export NODE_PATH="C:\Users\IMarek\AppData\Roaming\npm\node_modules"
+
+Now you should update PATH variable as well
+    
+set PATH=%PATH%;%NODE_PATH%
+
+Try to run your module now.
+
+You should be fine. 
+
+安装完成Express后运行node app.js 浏览器输入http://localhost:3000可预览即表明express安装成功。
+
+这里提示Express 500 Error: Cannot find module 'jade' 说明jade模块没有安装，windows无须手动下载jade包，已集成（如果其他地方需要，可在此下载https://github.com/visionmedia/jade）。输入npm install jade进行安装即可。
+jade安装完成后如图：
+
+关于 Express.js 中文入门指引手册可以参考http://www.csser.com/board/4f77e6f996ca600f78000936
+其他组件还有很多，如mysql，可以根据个人需要可以选择进行安装。
+默认情况下组件都是安装在C:\Program Files\nodejs\node_modules文件夹下，这也是nodejs相关组件的自动查找路径。
+
+第3步：测试项目工程
+
+现在安装了express组件，尝试键入:express myapp 建立一个名为myapp的工程，目录下多了一个 myapp 文件夹。
+是否需要复制node_modules文件夹到myapp下面由上述npm express安装方式决定
+在myapp下新建helloworld.js，代码如下:
+
+
+
+ var http = require("http");
+ 
+http.createServer(function(request, response) {
+ 
+response.writeHead(200, {"Content-Type": "text/plain"});
+ 
+response.write("Hello World");
+ 
+response.end();
+ 
+}).listen(8080);
+ 
+console.log('Server running at http://127.0.0.1:8080/');
+
+
+进入node.js command prompt 命令窗口,进入C:\Program Files\nodejs\myapp目录
+
+键入node helloworld.js
+
+浏览器输入http://localhost:8080或者地址http://127.0.0.1:8080/
+
+页面输出 :Hello World
+
+第4步：安装supervisor提高nodejs调试效率
+
+这一步不是必须，只是为了提高nodejs开发效率的辅助操作。以往我们开发PHP项目，代码每修改一次,可以直接打开浏览器预览效果，不需手动重启服务。但是开发nodejs程序，调试的时候，无论你修改了代码的哪一部分，都需要重启服务才能生效。这是因为 Node.js 只有在第一次引用到某部份时才会去解析脚
+本文件，以后都会直接访问内存，避免重复载入。。Node.js的这种设计虽然有利于提高性能，却不利于开发调试，因为我们在开发过程中总是希望修改后立即看到效果，而不是每次都要终止进程并重启。supervisor 可以帮助你实现这个功能，它会监视你对代码的改动，并自动重启 Node.js。
+
+supervisor的安装也很简单：
+
+直接用npm安装既可，键入命令: npm install supervisor -g 然后程序自动下载supervisor安装包到本地开始安装。
+
+这里注意一点的就是，supervisor必须安装到全局，如果你不安装到全局，错误命令会提示你安装到全局。
+
+如果不想安装到默认的全局,也可以自己修改全局路径到当前路径
+
+npm config set prefix "路径"
+
+安装完以后就可以用supervisor 来启动服务了。
+
+supervisor app.js
+
+补充：npm常用命令
+
+      （1）npm install moduleNames
+
+               安装Node模块
+
+               注意事项：如果在使用模块的时候不知道其名字，可以通过http://search.npmjs.org网站按照
+
+                                索引值找到想要的模块。npm也提供了查询的功能  npm search indexName
+
+                                 安装完毕后会产生一个node_modules目录，其目录下就是安装的各个node模块。
+
+                                 node的安装分为全局模式和本地模式。一般情况下会以本地模式运行，包会被安装
+
+                                到和你的应用代码统计的本地node_modules目录下。在全局模式下，Node包会被
+
+                                安装到Node的安装目录下的node_modules下。全局安装命令为
+
+                                npm install -g moduleName。获知使用npm set global=true来设定安装模式
+
+                              ，npm get global可以查看当前使用的安装模式。npm install <name> --save  安装的同时，将信息写入package.json中
+
+                                项目路径中如果有package.json文件时，直接使用npm install方法就可以根据dependencies配置安装所有的依赖包
+
+                                这样代码提交到github时，就不用提交node_modules这个文件夹了。
+
+
+       （2）npm view moduleNames
+
+                 查看node模块的package.json文件夹
+
+                注意事项：如果想要查看package.json文件夹下某个标签的内容，可以使用
+
+                                 npm view moduleName labelName
+
+       （3）npm list 
+
+                查看当前目录下已安装的node包。同命令npm ll/npm ls/npm la
+
+                注意事项：Node模块搜索是从代码执行的当前目录开始的，搜索结果取决于当前使用的目录中
+
+                                 的node_modules下的内容。 npm list parseable=true可以目录的形式来展现当
+
+                                 前安装的所有node包
+
+       （4）npm help
+
+                查看帮助命令。如果要单独查看install命令的帮助，可以使用的npm help install
+
+       （5）npm view moudleName dependencies
+
+                查看包的依赖关系
+
+       （6）npm view moduleName repository.url
+
+               查看包的源文件地址
+
+       （7 npm view moduleName engines
+
+               查看包所依赖的Node的版本
+
+      （8）npm help folders
+
+                查看npm使用的所有文件夹
+
+      （9）npm rebuild moduleName
+
+                用于更改包内容后进行重建
+
+      （10）npm outdated 
+
+                 检查包是否已经过时，此命令会列出所有已经过时的包，可以及时进行包的更新
+
+      （11）npm update moduleName
+
+                     更新node模块
+
+      （12）$ npm uninstall moudleName
+
+                      卸载node模块
+
+      （13）一个npm包是包含了package.json的文件夹，package.json描述了这个文件夹的结构。访
+
+                      问npm的json文件夹的方法如下：
+
+                            npm help json 
+
+                      此命令会以默认的方式打开一个网页，如果更改了默认打开程序则可能不会以网页的形式打
+
+                      开。
+
+      （14）发布一个npm包的时候，需要检验某个包名是否已存在
+
+                    npm search packageName
+
+      （15）很多时候我们在使用一个npm包的时候经常会忘记了require其相互依赖的模块，我们可以
+
+                     借助如如下命令来查看此模块相互依赖的包都有哪些
+
+
+
+      （16）npm init  会引导你创建一个package.json文件，包括名称、版本、作者这些信息等
+
+      （17）npm rm <name>移除，卸载一个模块。有以下几种命令形式：
+                    npm rm <name>
+                    npm r <name>
+                    npm uninstall <name>
+                    npm un <name>
+
+
+
+      （18）npm root 查看当前工程的包的安装路径，npm root -g  是查看全局的包的安装路径
+
+      （19）npm docs <packageName> 尝试当前包对应的文档URL，并使用浏览器打开该文档。
+
+      （20）npm config ? 获取配置文件信息，如环境变量，npmrc文件，package.json
+
+       更多命令请参看官方文档https://npmjs.org/doc/
