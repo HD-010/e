@@ -11,7 +11,9 @@ var DBService = {
      * @param {*} dBServiceName 
      */
     init: function(dBServiceName){
+        global.appDBConnect = [];
         dBServiceName = dBServiceName || 'Mysql';
+        var DBConnect;
         var DBConfigure = this.app.confs('database');
         if((Object.keys(DBConfigure).indexOf(dBServiceName) == -1)) {
             throw('数据库' + dBServiceName + '配置项不存在');
@@ -20,23 +22,21 @@ var DBService = {
         dBServiceName = DBConfigure[dBServiceName].typeName;
         //开启数据库连接对象在内存中共享
         try{
-            if(keyExists(appDBConnect,dBServiceName)) return appDBConnect[dBServiceName];
-        }catch(err){
-            global.appDBConnect = [];
-
+            DBConnect = appDBConnect[dBServiceName];
+        }catch(err){}
+        if(!DBConnect){
             if(!keyExists(this.data,dBServiceName)){
                 console.log("您的数据库配置错误，可供使用的数据库模块有：",this.data)
                 return;
             }
             var dBService = this.data[dBServiceName];
-            
             eval(('var dBService = new ' + dBService + '()'));
             dBService.configures = this.app.confs('database');
-            
-            var DBConnect = dBService.init();
+            DBConnect = dBService.init();
             appDBConnect[dBServiceName] = DBConnect;
-            return DBConnect;
         }
+        
+        return DBConnect;
     },
 
     /**
