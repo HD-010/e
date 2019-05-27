@@ -48,6 +48,7 @@ function Model(req) {
     this.iniModelPath = function(modelName){
         var router = getObjectVal(this.app,'router.data');
         var newModule = modelName.split(':');
+        
         switch(router.length){
             case 3:
                 switch(modelName.indexOf(':')){

@@ -28,3 +28,20 @@ global.getObjectVal = function(object,keyLink){
     object = (!object || (typeof object != 'object')) ? {} : object;
     return appConf(keyLink,object);
 }
+
+/**
+ * 获取配置文件中params中设定的系统目录root下项目路径的绝对路径
+ * 
+ */
+global.path = function(pathName){
+    var rootPath = appConf('params.root');
+    var dirPath = __dirname.replace(/\\/g,'/');
+    if(!rootPath) throw({
+        error:1,
+        message:"没有设置系统根目录root,请在配置文件params中设置root项"
+    });
+   
+    var realPath = dirPath.substr(0,dirPath.indexOf(rootPath)) + 
+    rootPath + appConf('params.' + pathName);
+    return realPath;
+}

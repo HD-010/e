@@ -1,7 +1,7 @@
 function App(){
     this.version = 'beta 1.3';
     this.env ='';
-    this.root = "";
+    this.root = "";      //框架根目录
     this.configures = {
         discript:'配置文件，在系统运行前需要加载完成。',
         dir: 'configs',  //配置文件存放目录。在项目中默认与e框架在同一层   

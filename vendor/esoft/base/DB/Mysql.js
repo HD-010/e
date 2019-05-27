@@ -31,17 +31,14 @@ function Mysql(){
     this.select = this.insert = this.update = this.delete = this.query = function(sql,callback){
         var that = this;
         that.connection.getConnection(function(error,connection){
+            if(error) throw(error);
             connection.query(sql,function(error,results,fields){
-                if(error) {
-                    console.log('[SELECT ERROR] -',error.message);
-                    return;
-                }
-    
+                connection.destroy(); 
+                if(error) throw(error);
                 if(that.withLog){
                     var action = sql.substr(0,sql.indexOf(' ')).trim() + 'Log';
                     if(action  in that) that[action](error || results);
                 }
-                connection.release(); 
                 callback(error,results,fields);
             });
         });
@@ -68,9 +65,9 @@ function Mysql(){
      */
     this.get = function(params,callback){
         var sqlStruct = this.initSqlStruct(params);
-        var join = params.join ? params.join : '';
+        var joinOn = params.joinOn ? params.joinOn : '';
         sql = 'select * from ' + params.table[0] + 
-        join + 
+        joinOn + 
         sqlStruct.where() + 
         sqlStruct.having() + 
         sqlStruct.groupBy() + 

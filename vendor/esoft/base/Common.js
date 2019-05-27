@@ -12,7 +12,7 @@ Common.prototype.disc = function(){
 Common.prototype.sync = __dirname + '/Sync';
 
 /**
- * 路由对象
+ * 路由对象 （该方法用于业务调用）
  * 当index　为非负数时，正序反回；为负数时，逆序返回；　为空时，返回字串。
  */
 Common.prototype.router = function(index){
@@ -29,7 +29,8 @@ Common.prototype.router = function(index){
 }
 
 /**
- * 视图目录
+ * 视图目录 （该方法用于业务调用）
+ * 返回视图目录的绝对路径。
  */
 Common.prototype.viewDir = function(){
     return this.app.root + '/views/';
@@ -43,6 +44,9 @@ Common.prototype.model = function(modelNmae,data){
     return this.app.model.init(modelNmae,data);
 }
 
+/**
+ * 上传服务（该方法用于业务调用）
+ */
 Common.prototype.upload = function(obj){
     return this.app.model.upload(obj);
 }
@@ -65,6 +69,7 @@ Common.prototype.plug = function(plugNmae,data){
 
 /**
  * 初始化一个数据库连接（该方法用于业务调用）,返回一个数据库连接对象
+ * 数据库配置对象名称，如果没有指定，则默认创建 Mysql 数据库连接对象
  */
 Common.prototype.DB = function(DBName){
     return this.app.dBService.init(DBName);

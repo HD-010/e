@@ -44,8 +44,8 @@ global.dateFormate = function(formate,time){
 	来源：CSDN 
 	原文：https://blog.csdn.net/carllucasyu/article/details/78569525 
 	版权声明：本文为博主原创文章，转载请附上博文链接！
+	获取当前日期属性本年度的第几周
  */
-
 global.getWeekOfYear = function(date){
     date = date || null;
   var today = new Date(date);

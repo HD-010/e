@@ -53,13 +53,11 @@ function Base(App){
         // console.log(controlPath);
         //载入控制器
         if(!fs.existsSync(controlPath + '.js')) {
-            log({
+            return {
                 error  : 1,
                 status : '5060',
                 message: "控制器:" + controlPath + '不存在',
-            });
-            
-            return res.send(controlPath + ' is not exists');
+            };
         }
         var control                    = require(controlPath);
         var Controler                  = require('./Controler');

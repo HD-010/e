@@ -5,7 +5,7 @@ function Router(req) {
         var pathname     = req.originalUrl;
         var pathPoint    = pathname.indexOf("?");
             this.urlPath = (pathPoint == -1) ? pathname : pathname.substr(0,pathPoint);
-        var path         = this.urlPath.substr(1).split('/');
+        var path         = processPathName(this.urlPath.substr(1).split('/'));
         switch(path.length){
             case 2: 
             case 3: 
@@ -17,6 +17,25 @@ function Router(req) {
                 break;
         }
         
+    }
+
+    /**
+     * 处理路径名称
+     * @param {*} arr 
+     */
+    function processPathName(arr){
+        var linePoint,sourceStr,newStr;
+        var routeArr = [];
+        for(var i = 0 ; i < arr.length; i++){
+            linePoint = arr[i].indexOf('-');
+            if(linePoint === -1) continue;
+            sourceStr = arr[i].substr(linePoint,2);
+            newStr = (arr[i].substr(linePoint+1,1)).toUpperCase();
+            var reg = new RegExp(sourceStr,'g');
+            arr[i] = arr[i].replace(reg,newStr);
+            log(arr[i])
+        }
+        return arr;
     }
 }
 
