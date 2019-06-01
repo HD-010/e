@@ -76,7 +76,8 @@ function Mysql(){
         sqlStruct.groupBy() + 
         sqlStruct.orderBy() + 
         sqlStruct.limit();
-        log(sql)
+        
+        log("@@@@@@@@@sql::@@@@@@@@@", sql, "@@@@@@@@@sql end@@@@@@@@@");
         
         this.select(sql,function(error,results,fields){
             callback(error,results,fields);
