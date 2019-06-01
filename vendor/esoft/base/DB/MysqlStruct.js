@@ -50,6 +50,10 @@ function MysqlStruct(){
             ]
         };
      */
+    this.fields = function(){
+        return (this.struct.fields && this.struct.fields.length > 0) ? " " + this.struct.fields.join(',') : "";
+    }
+
     this.where = function(delimiter){
         delimiter = delimiter || ' and ';
         return (this.struct.where && this.struct.where.length > 0) ? " where " + this.struct.where.join(delimiter) : "";

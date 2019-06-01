@@ -66,7 +66,10 @@ function Mysql(){
     this.get = function(params,callback){
         var sqlStruct = this.initSqlStruct(params);
         var joinOn = params.joinOn ? params.joinOn : '';
-        sql = 'select * from ' + params.table[0] + 
+        sql = 'select ' + 
+        sqlStruct.fields() +
+        ' from ' + 
+        params.table[0] + 
         joinOn + 
         sqlStruct.where() + 
         sqlStruct.having() + 
@@ -74,6 +77,7 @@ function Mysql(){
         sqlStruct.orderBy() + 
         sqlStruct.limit();
         log(sql)
+        
         this.select(sql,function(error,results,fields){
             callback(error,results,fields);
         });
