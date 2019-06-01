@@ -30,6 +30,7 @@ function Mysql(){
 
     this.select = this.insert = this.update = this.delete = this.query = function(sql,callback){
         var that = this;
+        if(that.withLog) that.sqlLog(sql);
         that.connection.getConnection(function(error,connection){
             if(error) throw(error);
             connection.query(sql,function(error,results,fields){
@@ -76,8 +77,6 @@ function Mysql(){
         sqlStruct.groupBy() + 
         sqlStruct.orderBy() + 
         sqlStruct.limit();
-        
-        log("@@@@@@@@@sql::@@@@@@@@@", sql, "@@@@@@@@@sql end@@@@@@@@@");
         
         this.select(sql,function(error,results,fields){
             callback(error,results,fields);
@@ -263,9 +262,10 @@ function Mysql(){
         });
     }
 
-    
-
-    
+    this.sqlLog = function(sql){
+        console.log('---------------------------SQL-----------------------------');
+        console.log(sql);        
+    }
 
     this.selectLog = function(result){
         console.log('--------------------------SELECT----------------------------');
