@@ -29,7 +29,7 @@ global.createSignature = function(req,userInfor){
  * uid 登录用户id
  */
 global.createOpenID = function(req,userInfor){
-    var uidStr = userInfor.uid.toString();
+    var uidStr = userInfor.id.toString();
     var signature = createSignature(req,userInfor);
     if(!signature) return false;
     var size = Math.ceil(signature.length / uidStr.length);
@@ -52,17 +52,15 @@ global.parseOpenID = function(openID){
     //uid长度标识
     var uidTag = openID.substr(-1,1);
     var uidLen = parseInt(uidTag,16);
-    openID = openID.substr(0,openID.length - 1);
+    openID = openID.substr(0,openID.length - 1);  //减法一位uid长度标识符
+    var size = Math.ceil((openID.length - uidLen) / uidLen);
+    var data = {sg:"",id:""};
     
-    var size = Math.ceil((openID.length - uidLen -1) / uidLen);
-    var data = {sg:"",uid:""};
-    
-    for(var i = 0; i < uidLen; i ++ ){
+    for(var i = 0; i <= uidLen; i ++ ){
         data.sg += openID.substr(i * size + i, size);
-        data.uid += openID.substr((i+1) * size + i, 1);
+        data.id += openID.substr((i+1) * size + i + 1, 1);
     }
-    data.uid += data.sg.substr(30,1);
+    data.id += data.sg.substr(30,uidLen);
     data.sg = data.sg.substr(0,30);
-
     return data;
 }
