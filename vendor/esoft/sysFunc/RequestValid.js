@@ -58,9 +58,9 @@ global.parseOpenID = function(openID){
     
     for(var i = 0; i <= uidLen; i ++ ){
         data.sg += openID.substr(i * size + i, size);
-        data.id += openID.substr((i+1) * size + i + 1, 1);
+        data.id += openID.substr((i+1) * size + i , 1);
     }
-    data.id += data.sg.substr(30,uidLen);
+    //data.id += data.sg.substr(30,uidLen);
     data.sg = data.sg.substr(0,30);
     return data;
 }

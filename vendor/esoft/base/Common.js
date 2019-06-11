@@ -137,18 +137,17 @@ Common.prototype.REQUEST = function(param,objExten){
  */
 Common.prototype.CURL = function(params){
     var request = require('request');
-    var requestData = '';
+    var requestData = params.data;
     var method = params.type || 'GET';
     var json = params.json || true;
     var headers = params.headers || {"content-type": "application/json"};
     var callback = params.callback || function(error,source){console.log("========CURL请求返回的数据=======",source)};
-
     responsebody = request({
         url: params.uri,
         method: method,
         json: json,
         headers: headers,
-        body: JSON.stringify(requestData)
+        body: requestData
     },function(error, response, body) {
         if (!error && response.statusCode == 200) {
             callback(error,body);
