@@ -19,7 +19,7 @@ global.array2value = function(array,key1,value,key2) {
     if(!array.length) return '';
 
     for(var i = 0; i < array.length; i ++){
-		if(array[i][key1] == value) return array[i][key2];
+		if(array[i][key1] == value) return key2 ? array[i][key2] : array[i];
 	}
 	return '';
 }
