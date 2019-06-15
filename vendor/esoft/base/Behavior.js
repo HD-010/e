@@ -25,13 +25,11 @@ function Behavior(){
 
         for (var v in behavior.ruler) {
             //if (v === '*') ruler = behavior.ruler[v];
-
             if ((v !== '*') && router.match(v)) {
                 ruler = ruler.concat(behavior.ruler[v]);
-                break;
+                //break;
             }
         }
-        
         if (ruler.length === 0) {
             callback(data);
             return;
