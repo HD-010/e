@@ -51,7 +51,7 @@ function MysqlStruct(){
         };
      */
     this.fields = function(){
-        return (this.struct.fields && this.struct.fields.length > 0) ? " " + this.struct.fields.join(',') : "";
+        return (this.struct.fields && this.struct.fields.length > 0) ? " " + this.struct.fields.join(',') : " * ";
     }
 
     this.where = function(delimiter){

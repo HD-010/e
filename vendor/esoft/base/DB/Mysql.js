@@ -31,6 +31,7 @@ function Mysql(){
     this.select = this.insert = this.update = this.delete = this.query = function(sql,callback){
         var that = this;
         if(that.withLog) that.sqlLog(sql);
+        log("==============================||",sql)
         that.connection.getConnection(function(error,connection){
             if(error) throw(error);
             connection.query(sql,function(error,results,fields){
@@ -55,7 +56,7 @@ function Mysql(){
      * this.struct对象结构如：
         params = {
             table:[],           //查询的表名
-            join:'',
+            joinOn:'',
             fields:[],          //被查询的字段名称（别名在此指定）
             where:[],           //查询条件
             having:[],          //查询条件
@@ -125,7 +126,11 @@ function Mysql(){
          */
         function set(){
             if(!params.where || !params.where.length) params.where = ["id='#'"];        //当没有传where参数时，默认新增记录
-            that.get(params,function(error,results,fields){
+            that.get({
+                table : params.table,
+                where : params.where,
+                fields : []
+            },function(error,results,fields){
                 if(error) throw('错误：保存数据失败，调取源数据失败');
                 params.table = table;
     
@@ -203,6 +208,7 @@ function Mysql(){
                         }
                     }
                 }
+                
                 if(!morfields) return callback();
                 //如：alter table ranyun_test add (sex float(11) ,cash float(11))
                 addonSql = 'alter table ' + table  + ' add (' + beAddFields.substr(2) + ')';
