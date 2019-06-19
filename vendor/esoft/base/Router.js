@@ -1,10 +1,10 @@
-function Router(req) {
+function Router() {
+    this.pathname;
     this.urlPath = '';
     
     this.init = function(base){
-        var pathname     = req.originalUrl;
-        var pathPoint    = pathname.indexOf("?");
-            this.urlPath = (pathPoint == -1) ? pathname : pathname.substr(0,pathPoint);
+        var pathPoint    = this.pathname.indexOf("?");
+            this.urlPath = (pathPoint == -1) ? this.pathname : this.pathname.substr(0,pathPoint);
         var path         = processPathName(this.urlPath.substr(1).split('/'));
         switch(path.length){
             case 2: 

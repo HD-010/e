@@ -39,7 +39,8 @@ function Base(App){
     //初始化路由
     this.initRouter = function(req){
         var Router = require('./Router');
-        var router = new Router(req);
+        var router = new Router();
+        router.pathname = req.originalUrl;
         router.init(this);
     };
 
@@ -70,6 +71,7 @@ function Base(App){
         controler.initLayouter();
         controler.req = req;
         controler.res = res;
+        controler.base = this;
 
         return controler;
     };

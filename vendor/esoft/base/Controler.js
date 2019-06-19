@@ -91,12 +91,22 @@ Controler.prototype.renderJson = function(data) {
     return;
 }
 
+
+/**
+ * 定向到指定的路由
+ */
+Controler.prototype.go = function(){
+    log("==============||||",this.app);
+    //this.app.interaction(this.req,this.res,this.base);
+}
+
 /**
  * 重定向
  */
 Controler.prototype.redirect = function(uri){
     this.res.redirect(uri);
 }
+
 
 /**
  * 返回当前页面的操作权限

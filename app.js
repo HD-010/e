@@ -6,7 +6,6 @@ router.get('/*',(req,res,next)=>{new Request(req,res,next)});
 router.post('/*',(req,res,next)=>{new Request(req,res,next)});
 
 function Request(req,res,next){
-    var status =  1;
     var App = new (require('./vendor/esoft/base/App'));
     App.env = 'dev';
     
@@ -34,19 +33,8 @@ function Request(req,res,next){
     behavior.req = req;
     behavior.res = res;
     App.feeler(behavior,function(){
-        return interaction();
+        return App.interaction(req,res,base);
     });
-    
-    function interaction(){
-        status --;
-        if(status === 0){
-            //实例化控制器
-            var controler = base.initControler(req,res);
-            if(controler.error) return res.render('error',controler);
-            
-            return App.run(base,controler);
-        } 
-    }
 }
 
 

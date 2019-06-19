@@ -85,6 +85,17 @@ function App(){
     };
 
     /**
+     * 执行请求
+     */
+    this.interaction = function(req,res,base){
+        //实例化控制器
+        var controler = base.initControler(req,res,base);
+        if(controler.error) return res.render('error',controler);
+        
+        return this.run(base,controler);
+    }
+
+    /**
      * 运行前的检测
      */
     this.feeler = function(detection,callback){
