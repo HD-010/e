@@ -31,13 +31,12 @@ function Mysql(){
     this.select = this.insert = this.update = this.delete = this.query = function(sql,callback){
         var that = this;
         if(that.withLog) that.sqlLog(sql);
-        log("==============================||",sql)
         that.connection.getConnection(function(error,connection){
             if(error) throw(error);
             connection.query(sql,function(error,results,fields){
                 connection.destroy(); 
                 if(error) throw(error);
-                if(that.withLog){
+                if(that.withLog === 1){
                     var action = sql.substr(0,sql.indexOf(' ')).trim() + 'Log';
                     if(action  in that) that[action](error || results);
                 }
@@ -112,7 +111,7 @@ function Mysql(){
         var that = this;
         var table = params.table;
         var schema;
-        
+        if(this.withLog) this.withLog = -1;
         params.table = [table];
         try{
             schema = dbSchema[table];
@@ -142,11 +141,13 @@ function Mysql(){
     
                     that.del(params,function(error,results,fields){
                         if(error) throw("错误：删除源数据失败");
+                        if(this.withLog) this.withLog = 1;
                         that.add(params,function(error,results,fields){
                             callback(error,results,fields);
                         });
                     })
                 }else{
+                    if(this.withLog) this.withLog = 1;
                     that.add(params,function(error,results,fields){
                         callback(error,results,fields);
                     });
@@ -277,28 +278,28 @@ function Mysql(){
         console.log('--------------------------SELECT----------------------------');
         console.log(result);        
         console.log('------------------------------------------------------------\n\n');
-        this.putOutDone();
+        if(this.withLog === 1) this.putOutDone();
     }
 
     this.insertLog = function(result){
         console.log('--------------------------INSERT----------------------------');
         console.log('INSERT ID:',result);        
         console.log('-------------------------------------------------------------\n\n');
-        this.putOutDone();
+        if(this.withLog === 1) this.putOutDone();
     }
 
     this.updateLog = function(result){
-        console.log('--------------------------DELETE----------------------------');
+        console.log('--------------------------UPDATE----------------------------');
        console.log('UPDATE affectedRows',result.affectedRows);
        console.log('--------------------------------------------------------------\n\n');  
-       this.putOutDone();
+       if(this.withLog === 1) this.putOutDone();
     }
 
     this.deleteLog = function(result){
         console.log('--------------------------DELETE----------------------------');
        console.log('DELETE affectedRows',result.affectedRows);
        console.log('--------------------------------------------------------------\n\n');  
-       this.putOutDone();
+       if(this.withLog === 1) this.putOutDone();
     }
 }
 
