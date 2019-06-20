@@ -60,8 +60,7 @@ function Behavior(){
 
             if (state === 'end' || state === 'faile') {
                 clearInterval(psb);
-                callback(data);
-                return;
+                return callback(data);
             }
         });
     }

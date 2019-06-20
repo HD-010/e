@@ -1,0 +1,4 @@
+
+> app@1.0.0 start E:\WWW\NODEJS\youbang\app
+> node ./bin/www
+

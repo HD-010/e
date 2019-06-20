@@ -30,12 +30,12 @@ function Mysql(){
 
     this.select = this.insert = this.update = this.delete = this.query = function(sql,callback){
         var that = this;
-        if(that.withLog) that.sqlLog(sql);
-        that.connection.getConnection(function(error,connection){
+        if(this.withLog) this.sqlLog(sql);
+        this.connection.getConnection(function(error,connection){
             if(error) throw(error);
             connection.query(sql,function(error,results,fields){
-                connection.destroy(); 
                 if(error) throw(error);
+                connection.release(); 
                 if(that.withLog === 1){
                     var action = sql.substr(0,sql.indexOf(' ')).trim() + 'Log';
                     if(action  in that) that[action](error || results);
@@ -43,6 +43,7 @@ function Mysql(){
                 callback(error,results,fields);
             });
         });
+
     }
 
     //初始化sql构造对象

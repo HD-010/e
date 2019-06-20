@@ -31,9 +31,9 @@ function Model(req) {
             model.req = req;
             //记忆当前models所在的modules路径
             if(this.isDiffModule) model.modulePath = this.modelPath.substr(0,this.modelPath.indexOf('/models/'));
-            this.data[modelName] = model;
+            //this.data[modelName] = model;
         }catch(err){
-            console.log("加载模块时错误：",err);
+            console.log("加载模块时错误================================================================================：",err);
         }
         return model || new Object();
     };
