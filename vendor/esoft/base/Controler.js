@@ -42,6 +42,7 @@ Controler.prototype.renderLayer = function(data, view) {
     }
     data.viewPath = this.app.root + '/views/' + path + '.html';
     data.config = this.app.param();
+    console.log("=================request end======================");
     this.res.render(this.layouter, data);
 }
 
@@ -70,6 +71,7 @@ Controler.prototype.render = function(data, view, auto) {
     }
     data.viewPath = this.app.root + '/views/' + path + '.html';
     data.config = this.app.param();
+    console.log("=================request end======================");
     this.res.render(path, data);
 }
 
@@ -87,6 +89,7 @@ Controler.prototype.renderJson = function(data) {
         });
     }
     if(backUri) _data.uri = backUri;
+    console.log("=================request end======================");
     this.res.json(_data);
     return;
 }

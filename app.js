@@ -6,7 +6,7 @@ router.get('/*',(req,res,next)=>{new Request(req,res,next)});
 router.post('/*',(req,res,next)=>{new Request(req,res,next)});
 
 function Request(req,res,next){
-    if(isRel()) return res.render('error');
+    if(isRel(req)) return res.render('error',{message: '文件不存在',error:{status: 404,stack:''}});
     var App = new (require('./vendor/esoft/base/App'));
     App.env = 'dev';
     
@@ -38,8 +38,15 @@ function Request(req,res,next){
     });
 }
 
-function isRel(){
-    return false;
+/**
+ * 判断路由是否资源目录
+ * @param {*} req 
+ */
+function isRel(req){
+    var fs = require('fs');
+    var staticDir = req.originalUrl.split('/')[1];
+    staticDir = __dirname + '/../public/' + staticDir;
+    return fs.existsSync(staticDir);
 }
 
 
