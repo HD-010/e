@@ -6,6 +6,7 @@ router.get('/*',(req,res,next)=>{new Request(req,res,next)});
 router.post('/*',(req,res,next)=>{new Request(req,res,next)});
 
 function Request(req,res,next){
+    if(isRel()) return res.render('error');
     var App = new (require('./vendor/esoft/base/App'));
     App.env = 'dev';
     
@@ -35,6 +36,10 @@ function Request(req,res,next){
     App.feeler(behavior,function(){
         return App.interaction(req,res,base);
     });
+}
+
+function isRel(){
+    return false;
 }
 
 
