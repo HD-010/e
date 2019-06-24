@@ -107,6 +107,7 @@ function Mysql(){
                 }
             ]
         }
+        注 ： 当没有传where参数时，默认新增记录
      */
     this.set = function(params,callback){
         var that = this;
@@ -114,19 +115,50 @@ function Mysql(){
         var schema;
         if(this.withLog) this.withLog = -1;
         params.table = [table];
-        try{
+        if(global.dbSchema && dbSchema[table]){
             schema = dbSchema[table];
             addFields(set);
-        }catch(err){
-            initSchema(table,set);
+        }else{
+            initSchema(params.table[0],set);
         }
         
         /**
          * 保存字段对应的数据
          */
         function set(){
-            if(!params.where || !params.where.length) params.where = ["id='#'"];        //当没有传where参数时，默认新增记录
-            that.get({
+            //if(!params.where || !params.where.length) params.where = ["id='#'"];        //当没有传where参数时，默认新增记录
+            
+            if(!params.where || !params.where.length){
+                if(this.withLog) this.withLog = 1;
+                that.add(params,function(error,results,fields){
+                    callback(error,results,fields);
+                });
+            }else{
+                that.get({
+                    table : params.table,
+                    where : params.where,
+                    fields : []
+                },function(error,results,fields){
+                    if(error) throw('错误：保存数据失败，调取源数据失败');
+                    params.table = table;
+        
+                    for(var i = 0; i < results.length; i ++){
+                        results[i] = mergeObj([results[i],params.fields[0]])
+                    }
+                    params.fields = results;
+    
+                    that.del(params,function(error,results,fields){
+                        if(error) throw("错误：删除源数据失败");
+                        if(this.withLog) this.withLog = 1;
+                        that.add(params,function(error,results,fields){
+                            callback(error,results,fields);
+                        });
+                    })
+                })
+            }
+
+
+            /*that.get({
                 table : params.table,
                 where : params.where,
                 fields : []
@@ -153,7 +185,7 @@ function Mysql(){
                         callback(error,results,fields);
                     });
                 }
-            })
+            })*/
         }
 
         /**
@@ -172,15 +204,11 @@ function Mysql(){
             that.get(params,function(error,results,fields){
                 if(error) throw('错误：调取表结构失败');
                 if(!results.length) throw('错误：数据表'+ table + '不存在');
-                try{
-                    dbSchema[table] = results;
-                }catch(err){
-                    global.dbSchema = [];
-                    dbSchema[table]= results;
-                    
-                    //判断保存数据对应的字段是不是存在，如果不存在，则动态增加
-                    addFields(set)
-                }
+                if(!global.dbSchema) global.dbSchema = [];
+                dbSchema[table]= results;
+                
+                //判断保存数据对应的字段是不是存在，如果不存在，则动态增加
+                addFields(set)
             });
         }
 
