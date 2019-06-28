@@ -82,7 +82,7 @@ Controler.prototype.renderJson = function(data) {
     var _data = (data && (typeof data === 'object')) ? data : {};
     var backUri = this.POST('backuri',{default:this.GET('backuri',{default:''})});
     if(data != _data){
-        console.log({
+        throw({
             error  : 1,
             message: '调用 renderJson()方法时，传入的参数类型错误!',
             data   : data

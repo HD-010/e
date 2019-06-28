@@ -118,6 +118,14 @@ Common.prototype.REQUEST = function(param,objExten){
 }
 
 /**
+ * 返回路由格式的参数（该方法用于业务调用）
+ */
+Common.prototype.param = function(paramName){
+    this.loadRequest();
+    return this.request.param(this.router,paramName);
+}
+
+/**
  * curl请求（该方法用于业务调用）
  params:{
      uri:'',

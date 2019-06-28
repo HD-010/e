@@ -136,6 +136,16 @@ function Request(req){
         return this.data.data;
     };
     
+    /**
+     * 返回路由格式的参数（该方法用于业务调用）
+     */
+    this.param = function(router,paramName){
+        params = router.params.split('/');
+        var index = params.indexOf(paramName);
+        
+        return (index != -1) ? params[index + 1] : undefined;
+    }
+    
     this.processPOST = function(objExten){
         console.log("POST");
         var err = {};
