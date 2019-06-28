@@ -11,18 +11,17 @@ function Router() {
             case 0:
                 base.router.state  = 1;
                 base.router.data   = [path[0],path[1]];
-                base.router.string = '/' + base.router.data.join('/');
-                base.router.params = this.urlPath.substr(base.router.string.length + 1);
                 break;
             case 1:
                 base.router.state  = 1;
                 base.router.data   = [path[0],path[1],path[2]];
-                base.router.string = '/' + base.router.data.join('/');
-                base.router.params = this.urlPath.substr(base.router.string.length + 1);
                 break;
             default :
                 break;
         }
+        base.router.string = '/' + base.router.data.join('/');
+        base.router.params = this.urlPath.substr(base.router.string.length + 1);
+        
         // switch(path.length){
         //     case 2: 
         //     case 3: 
