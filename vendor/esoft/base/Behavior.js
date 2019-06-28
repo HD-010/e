@@ -53,6 +53,7 @@ function Behavior(){
                 }
                 behavior[func](params, function(bres) {
                     data = bres;
+                    if(bres.error) console.log(bres);
                     state = (bres.error === 0) ? 'success' : 'faile';
                     if (ruler.length === 0) state = 'end';
                 });

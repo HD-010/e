@@ -67,7 +67,7 @@ function Base(App){
         //继承Controler        
         util.inherits(control,Controler);
         //实例化用户定义的逻辑控制器
-        var controler = new control();
+        var controler = new control(res,res);
         controler.initLayouter();
         controler.req = req;
         controler.res = res;

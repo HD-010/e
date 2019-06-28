@@ -6,21 +6,37 @@ function Router() {
         var pathPoint    = this.pathname.indexOf("?");
             this.urlPath = (pathPoint == -1) ? this.pathname : this.pathname.substr(0,pathPoint);
         var path         = processPathName(this.urlPath.substr(1).split('/'));
-        switch(path.length){
-            case 2: 
-            case 3: 
+
+        switch(path.length % 2){
+            case 0:
                 base.router.state  = 1;
-                base.router.data   = path;
-                base.router.string = '/' + path.join('/');
+                base.router.data   = [path[0],path[1]];
+                base.router.string = '/' + base.router.data.join('/');
+                base.router.params = this.urlPath.substr(base.router.string.length + 1);
                 break;
-            default: 
+            case 1:
+                base.router.state  = 1;
+                base.router.data   = [path[0],path[1],path[2]];
+                base.router.string = '/' + base.router.data.join('/');
+                base.router.params = this.urlPath.substr(base.router.string.length + 1);
+                break;
+            default :
                 break;
         }
-        
+        // switch(path.length){
+        //     case 2: 
+        //     case 3: 
+        //         base.router.state  = 1;
+        //         base.router.data   = path;
+        //         base.router.string = '/' + path.join('/');
+        //         break;
+        //     default: 
+        //         break;
+        // }
     }
 
     /**
-     * 处理路径名称
+     * 处理路径名称,将字符‘-x’转换成‘X’
      * @param {*} arr 
      */
     function processPathName(arr){
@@ -33,7 +49,6 @@ function Router() {
             newStr = (arr[i].substr(linePoint+1,1)).toUpperCase();
             var reg = new RegExp(sourceStr,'g');
             arr[i] = arr[i].replace(reg,newStr);
-            log(arr[i])
         }
         return arr;
     }
