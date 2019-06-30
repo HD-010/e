@@ -12,7 +12,7 @@ function Controler() {}
 util.inherits(Controler, Common);
 
 Controler.prototype.initLayouter = function() {
-    var module = (this.router.data.length == 3) ? this.router.data[0] + '.' : "";
+    var module = (this.req.router.data.length == 3) ? this.req.router.data[0] + '.' : "";
     var layouterPath = 'layouter.' + module + 'layout';
     var usedLayouter;
     var usedName = 'main';
@@ -20,7 +20,7 @@ Controler.prototype.initLayouter = function() {
         usedName =  appConf('layouter.' + module + 'used') ? 
         appConf('layouter.' + module + 'used') : 
         appConf(layouterPath)[0];
-        eval(('usedLayouter = ' + usedName + '(this.router.data)'));
+        eval(('usedLayouter = ' + usedName + '(this.req.router.data)'));
         usedLayouter = 'layouter/'+usedLayouter;
     }catch(error){
         usedLayouter = 'layouter/'+usedName;
@@ -34,15 +34,14 @@ Controler.prototype.initLayouter = function() {
  * 在视图可以用config,viewPath两个参数
  */
 Controler.prototype.renderLayer = function(data, view) {
-    var path     = this.router.data.join('/');
+    var path     = this.req.router.data.join('/');
         view     = view || '';
     if (view) {
         path = (view.indexOf('/') == -1) ?
             path.substr(0, path.lastIndexOf('/') + 1) + view: view.substr(1);
     }
-    data.viewPath = this.app.root + '/views/' + path + '.html';
-    data.config = this.app.param();
-    console.log("=================request end======================");
+    data.viewPath = this.req.eState.root + '/views/' + path + '.html';
+    data.config = this.req.eState.param();
     this.res.render(this.layouter, data);
 }
 
@@ -63,15 +62,14 @@ Controler.prototype.render = function(data, view, auto) {
     if(auto && isAjax(this.req)) return this.renderJson(data);
     
     data = data || {};
-    var path = this.router.data.join('/');
+    var path = this.req.router.data.join('/');
         view = view || '';
     if (view && (typeof view != 'boolean')) {
         path = (view.indexOf('/') == -1) ?
             path.substr(0, path.lastIndexOf('/') + 1) + view: view.substr(1);
     }
-    data.viewPath = this.app.root + '/views/' + path + '.html';
-    data.config = this.app.param();
-    console.log("=================request end======================");
+    data.viewPath =  this.req.eState.root + '/views/' + path + '.html';
+    data.config =  this.req.eState.param();
     this.res.render(path, data);
 }
 
@@ -89,7 +87,6 @@ Controler.prototype.renderJson = function(data) {
         });
     }
     if(backUri) _data.uri = backUri;
-    console.log("=================request end======================");
     this.res.json(_data);
     return;
 }

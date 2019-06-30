@@ -140,6 +140,7 @@ function Request(req){
      * 返回路由格式的参数（该方法用于业务调用）
      */
     this.param = function(router,paramName){
+        if(!router.params) router.params = '';
         params = router.params.split('/');
         var index = params.indexOf(paramName);
         

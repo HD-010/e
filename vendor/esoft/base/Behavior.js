@@ -18,7 +18,7 @@ function Behavior(){
 
         //读取请求前执行的操作名称
         var ruler                    = [];
-        var router                   = '/' + this.router.data.join('/');
+        var router                   = '/' + this.req.router.data.join('/');
         var queryStr                 = this.req.originalUrl;
         var index                    = queryStr.indexOf('?');
         if  (index !== false) router = router + queryStr.substr(index);

@@ -4,14 +4,14 @@ var util = require('util');
 /**
  * 插件初始化类，初始化目录依次为系统插件目录esoft/plug 和用户在configs/params.sj中指定的plugDir目录
  */
-var Plug = {
-    data:[],
-    plugDir:'',
+function Plug(){
+    this.data = [];
+    this.plugDir = '';
     /**
      * 实例化指定模块
      * @param {*} plugName 
      */
-    init: function(plugName,data){
+    this.init = function(plugName,data){
         var plug = new Object();
         try{
             var plugPath = "";
@@ -45,7 +45,7 @@ var Plug = {
         }
         
         return plug;
-    },
+    }
 }
 
 module.exports = Plug;

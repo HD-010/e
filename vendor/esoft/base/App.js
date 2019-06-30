@@ -41,14 +41,11 @@ function App(){
         var dirname = __dirname.replace(/\\/g,'/');
         //初始化应用目录
         this.root = dirname.substr(0,dirname.indexOf('/e/'));
-        try{
-            if(appHelper) return;
-        }catch(err){
-            //初始化loadeSysFunc类
-            var path = this.root + '/e/vendor/esoft/sysFunc/';
-            this.loadeSysFunc(path);
-            global.appHelper = 1;
-        }
+        //初始化loadeSysFunc类
+        var path = this.root + '/e/vendor/esoft/sysFunc/';
+        this.loadeSysFunc(path);
+
+        return this;
     }; 
 
     //初始化Helper类
@@ -69,9 +66,9 @@ function App(){
      * @param {*} paramName 参数名称
      */
     this.param = function(paramName){
-        if(!paramName) return this.configures.data;
-        return (paramName in this.configures.data['params']) ? 
-        this.configures.data['params'][paramName] :
+        if(!paramName) return appConfigures.data;
+        return (paramName in appConfigures.data['params']) ? 
+        appConfigures.data['params'][paramName] :
         null;
     };
 
@@ -81,7 +78,7 @@ function App(){
      * @param {*} paramName 参数名称
      */
     this.confs = function(paramName){
-        return this.configures.data[paramName];
+        return appConfigures.data[paramName];
     };
 
     /**
@@ -89,23 +86,23 @@ function App(){
      */
     this.interaction = function(req,res,base){
         //实例化控制器
-        var controler = base.initControler(req,res,base);
+        var controler = base.initControler(req,res);
         if(controler.error) return res.render('error',controler);
         
-        return this.run(base,controler);
+        return this.run(req,res,controler);
     }
 
     /**
      * 运行前的检测
      */
-    this.feeler = function(detection,callback){
+    this.feeler = function(res,detection,callback){
         detection.run(function(data){
             if(data.error !== 0){
                 if(data.uri){
-                    detection.res.redirect(data.uri);
+                    res.redirect(data.uri);
                     return;
                 }
-                detection.res.send("验证错误:" + data.message);
+                res.send("验证错误:" + data.message);
                 return;
             }
             callback();
@@ -118,13 +115,13 @@ function App(){
      * @param {*} controler 
      * @param {*} res 
      */
-    this.run = function(base,controler){
-        var actionIndex = base.router.data.length - 1;
-        var action = base.router.data[actionIndex];
+    this.run = function(req,res,controler){
+        var actionIndex = req.router.data.length - 1;
+        var action = req.router.data[actionIndex];
         if(! (action in controler)){
             this.state.message = '找不到您需要的操作！';
             this.state.status = '5070';
-            return controler.res.render('error',this.state);
+            return res.render('error',this.state);
         }
         
         return (controler[action])();

@@ -17,7 +17,7 @@ Common.prototype.sync = __dirname + '/Sync';
  */
 Common.prototype.router = function(index){
     if(typeof index === 'number'){
-        var router = this.app.router.data;
+        var router = this.req.router.data;
         if(index < 0){
             return router[router.length + index];
         }else{
@@ -25,7 +25,7 @@ Common.prototype.router = function(index){
         }
     }
 
-    return this.app.router.string;
+    return this.req.router.string;
 }
 
 /**
@@ -33,7 +33,7 @@ Common.prototype.router = function(index){
  * 返回视图目录的绝对路径。
  */
 Common.prototype.viewDir = function(){
-    return this.app.root + '/views/';
+    return this.req.eState.root + '/views/';
 }
 
 
@@ -41,7 +41,7 @@ Common.prototype.viewDir = function(){
  * 引用模块类初始化的方法（该方法用于业务调用）
  */
 Common.prototype.model = function(modelNmae,data){
-    return this.app.model.init(modelNmae,data);
+    return this.req.model.init(this.req,modelNmae,data);
 }
 
 /**
@@ -57,7 +57,7 @@ Common.prototype.upload = function(obj){
 Common.prototype.service = function(serviceNmae,data){
     data = data || {};
     data.modulePath = this.modulePath;
-    return this.app.service.init(serviceNmae,data);
+    return this.req.service.init(this.req,serviceNmae,data);
 }
 
 /**
@@ -72,7 +72,7 @@ Common.prototype.plug = function(plugNmae,data){
  * 数据库配置对象名称，如果没有指定，则默认创建 Mysql 数据库连接对象
  */
 Common.prototype.DB = function(DBName){
-    return this.app.dBService.init(DBName);
+    return this.req.DBService.init(this.req,DBName);
 }
 
 /**
