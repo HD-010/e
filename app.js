@@ -33,45 +33,6 @@ function Request(req,res,next){
     req.eState.feeler(res,behavior,function(){
         return req.eState.interaction(req,res,base);
     });
-    
-    
-    //log("=+++++++++++++++++++++++++++",behavior);
-    //当前步骤前需要插入req.eState.feeler()
-    //return req.eState.interaction(req,res,base);
-    
-    
-    // if(req.originalUrl == '/tools/test/ab'){
-    //     times ++;
-    //     var data = {
-    //         error: 0,
-    //         message: "this is 11111111111",
-    //         times: times
-    //     }
-
-    //     var connect = req.DBService.init(req);
-    //     connect.get({
-    //         table: ['youbang_sys_template_users']
-    //     },function(err,results){
-            
-    //         res.json(results)
-    //     });
-    // }
-
-    // if(req.originalUrl == '/tools/test2/ab'){
-    //     times ++;
-    //     var data = {
-    //         error: 0,
-    //         message: "this is 22222222222222",
-    //         times: times
-    //     }
-    //     var connect = req.DBService.init(req);
-    //     connect.get({
-    //         table: ['youbang_sys_acount_type']
-    //     },function(err,results){
-    //         res.json(results)
-    //     });
-        
-    // }
 }
 
 /**
