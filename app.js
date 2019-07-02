@@ -2,24 +2,21 @@ var express = require('express');
 var fs      = require('fs');
 var router  = express.Router();
 
-router.get('/*',(req,res,next)=>{new Request(req,res,next)});
-router.post('/*',(req,res,next)=>{new Request(req,res,next)});
+router.get('/*',Request);
+router.post('/*',Request);
 
 function Request(req,res,next){
     if(isRel(req)) return res.render('error',{message: '文件不存在',error:{status: 404,stack:''}});
-    var App = new (require('./vendor/esoft/base/App'));
-    App.env = 'dev';
-    console.log("=================request start=======",req.originalUrl,"===============")
-    //载base对象
-    var Base = require('./vendor/esoft/base/Base');
-    var base = new Base(App);
-    
+    if(typeof times == 'undefined') global.times = 0;
+    req.env = 'dev';
     //初始化App
-    base.initApp();
+    req.eState = (new (require('./vendor/esoft/base/App'))).init();
+    //载base对象
+    var base = new (require('./vendor/esoft/base/Base'))();
     //初始化配置文件
-    base.initConfigures();
+    base.initConfigures(req);
     //初始化数据库类型;
-    base.initDBService();
+    base.initDBService(req);
     //初始化路由
     base.initRouter(req);
     //初始化模块类
@@ -30,11 +27,11 @@ function Request(req,res,next){
     base.initPlug(req);
 
     //实例化behavior
-    var behavior = base.initBehavior();
+    var behavior = base.initBehavior(req);
     behavior.req = req;
     behavior.res = res;
-    App.feeler(behavior,function(){
-        return App.interaction(req,res,base);
+    req.eState.feeler(res,behavior,function(){
+        return req.eState.interaction(req,res,base);
     });
 }
 

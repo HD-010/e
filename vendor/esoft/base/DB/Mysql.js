@@ -12,11 +12,11 @@ function Mysql(){
     this.schema = {};
     
     this.init = function(){
-        var mysqlObj = new Mysql();
         var mysql = require('mysql');
-        mysqlObj.connection = mysql.createPool(this.configures.Mysql);
+        if(typeof mysqlPool === 'undefined') global.mysqlPool = mysql.createPool(this.configures.Mysql);
+        this.connection = mysqlPool
         
-        return mysqlObj;
+        return this;
     }
 
     this.log = function(){

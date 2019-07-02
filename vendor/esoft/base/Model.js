@@ -16,26 +16,25 @@ function Model(req) {
      * 
      * @param {*} modelName 
      */
-    this.init = function(modelName,data){
+    this.init = function(req,modelName,data){
         let model;
         //重置不同module的标识
         this.isDiffModule = false;          
-        this.iniModelPath(modelName);
+        this.iniModelPath(req,modelName);
         
         try{
             let loadModel = require(this.modelPath);
             let common = require('./Common');
-            loadModel.prototype.app  = this.app;
+            loadModel.prototype.req  = req;
             util.inherits(loadModel,common);
             model = new loadModel();
             model.req = req;
             //记忆当前models所在的modules路径
             if(this.isDiffModule) model.modulePath = this.modelPath.substr(0,this.modelPath.indexOf('/models/'));
             //this.data[modelName] = model;
-        }catch(err){
-            console.log("加载模块时错误================================================================================：",err);
-        }
-        return model || new Object();
+        }catch(err){throw(err);}
+            
+        return model;
     };
 
     /**
@@ -45,8 +44,9 @@ function Model(req) {
      * 2、:modelName
      * 3、module:modelName
      */
-    this.iniModelPath = function(modelName){
-        var router = getObjectVal(this.app,'router.data');
+    this.iniModelPath = function(req,modelName){
+        //var router = getObjectVal(this.app,'router.data');
+        var router = req.router.data;
         var newModule = modelName.split(':');
         
         switch(router.length){

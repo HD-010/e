@@ -4,24 +4,24 @@ var Configures = {
     readFiles: '读取配置文件',
     configPath:'',
 
-    init: function(App){
+    init: function(req){
         //初始化配置文件目录
-        this.initPath(App)
+        this.initPath(req)
         //初始化配置文件
-        this.initConfigures(App);
+        this.initConfigures(req);
     },
     
-    initPath: function(App){
-        var env =(App.env === 'pro') ? '/pro' : '/dev'; 
-        if(!App.configures.state){
-            this.configPath = App.root + '/' + App.configures.dir + env;
-            mkdir(this.configPath);
-        }
+    initPath: function(req){
+        var env =(req.env === 'pro') ? '/pro' : '/dev'; 
+        if(req.eState.configures.state) return;
+        this.configPath = req.eState.root + '/' + req.eState.configures.dir + env;
+        mkdir(this.configPath);
     },
-
-    initConfigures: function(App){
-        if(App.configures.state) return;
-        App.configures.data = [];
+    
+    initConfigures: function(req){
+        if(req.eState.configures.state) return;
+        global.appConfigures = [];
+        appConfigures.data = [];
         //配置文件路径
         var path = this.configPath;
         //统计总的配置文件数量
@@ -31,14 +31,14 @@ var Configures = {
             var objName = file.split('.')[0];
             //console.log('FILENAME:',file);
             //跳过config对象中存在的同名的配置文件信息
-            if(!(objName in App.configures.data) && fs.existsSync(path + '/' +file)) {
+            if(!(objName in appConfigures.data) && fs.existsSync(path + '/' +file)) {
                 //读取配置到config对象
                 //console.log("正在加载配置文件：",path + '/' + file);
-                App.configures.data[objName] = require(path + '/' + file)[objName];
+                appConfigures.data[objName] = require(path + '/' + file)[objName];
             }
         });
         //console.log("配置文件初始化完成！");
-        App.configures.state = 1;
+        req.eState.configures.state = 1;
     }
 }
 
