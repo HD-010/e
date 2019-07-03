@@ -122,7 +122,7 @@ Common.prototype.REQUEST = function(param,objExten){
  */
 Common.prototype.param = function(paramName){
     this.loadRequest();
-    return this.request.param(this.router,paramName);
+    return this.request.param(this.req.router,paramName);
 }
 
 /**
