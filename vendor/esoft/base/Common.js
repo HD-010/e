@@ -48,7 +48,7 @@ Common.prototype.model = function(modelNmae,data){
  * 上传服务（该方法用于业务调用）
  */
 Common.prototype.upload = function(obj){
-    return this.app.model.upload(obj);
+    return this.req.model.upload(obj);
 }
 
 /**
@@ -64,7 +64,7 @@ Common.prototype.service = function(serviceNmae,data){
  * 引用插件类初始化的方法（该方法用于业务调用）
  */
 Common.prototype.plug = function(plugNmae,data){
-    return this.app.plug.init(plugNmae,data);
+    return this.req.plug.init(plugNmae,data);
 }
 
 /**

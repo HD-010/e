@@ -93,7 +93,7 @@ function Model(req) {
             var D       = d.getDate();
                 typeDir = Y + '/' + M + '/' + D + '/';
         }
-        var filePath    = this.app.root + this.app.param('sourceDir') + '/' + obj.path + typeDir;
+        var filePath    = this.eState.root + this.eState.param('sourceDir') + '/' + obj.path + typeDir;
         var MimeType    = require('../lib/MimeType');
         var fileName    = obj.req.files[0].filename;
         var mimeType    = obj.req.files[0].mimetype;

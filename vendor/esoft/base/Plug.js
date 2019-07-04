@@ -29,7 +29,6 @@ function Plug(){
                 loadPlug.prototype.req = this.req;
                 loadPlug.prototype.res = this.res;
                 loadPlug.prototype.next = this.next;
-                loadPlug.prototype.app = this.app;
                 util.inherits(loadPlug,common);
                 data = data || '';
                 plug = new loadPlug(data);
