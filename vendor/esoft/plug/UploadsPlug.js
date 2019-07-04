@@ -60,9 +60,9 @@ function UploadsPlug(data){
                     success : function(data) {
                         console.log(data);
                         if (data.state == 1) {
-                            data.successCallback(data);
+                            (data.successCallback)(data);
                         } else {
-                            data.faileCallback(data);
+                            (data.faileCallback)(data);
                         }
                         uploading = false;
                     }
