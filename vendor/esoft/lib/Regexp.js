@@ -30,7 +30,7 @@ var Regexp = {
     //过滤html符号
     specialHTML: function(s) {
         //var regex = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#……&*（）|{}]");
-        var regex = new RegExp("[`~!#$^*()=|{}':;',\\[\\]<>~！@#……*（）：\s|{}]");
+        var regex = new RegExp("[`~!#$^*()|{}':;',\\[\\]<>~！@#……*（）：|{}]");
         var rs    = "";
         for (var i = 0; i < s.length; i++) {
             rs = rs + s.substr(i, 1).replace(regex, '');
