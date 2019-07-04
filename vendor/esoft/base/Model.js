@@ -19,7 +19,7 @@ function Model(req) {
     this.init = function(req,modelName,data){
         let model;
         //重置不同module的标识
-        this.isDiffModule = false;          
+        this.isDiffModule = false;
         this.iniModelPath(req,modelName);
         
         try{
@@ -47,6 +47,7 @@ function Model(req) {
     this.iniModelPath = function(req,modelName){
         //var router = getObjectVal(this.app,'router.data');
         var router = req.router.data;
+       
         var newModule = modelName.split(':');
         
         switch(router.length){
