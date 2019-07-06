@@ -91,6 +91,30 @@ Controler.prototype.renderJson = function(data) {
     return;
 }
 
+/**
+ * 尝试返回渲染视图，如查控制器中查询未结束，则不渲染
+ * data object 一次查询得到的结果，须添加error属性，标识查询成功还是失败
+ * 结构如：{error:0,results:res}
+ * ps number 步查看的子进程数 
+ */
+Controler.prototype.testRender = function(data,ps,view){
+    ps --;
+    if(data.error || !ps) return view ? this.render(data) : this.render(data, view);
+    return ps;
+}
+
+/**
+ * 尝试返回json，如查控制器中查询未结束，则不返回
+ * data object 一次查询得到的结果，须添加error属性，标识查询成功还是失败
+ * 结构如：{error:0,results:res}
+ * ps number 步查看的子进程数 
+ */
+Controler.prototype.testRenderJson = function(data,ps){
+    ps --;
+    if(data.error || !ps) return this.renderJson(data);
+    return ps;
+}
+
 
 /**
  * 定向到指定的路由
