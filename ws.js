@@ -1,7 +1,7 @@
 var fs = require('fs');
 var wsProcess = require('./wsProcess');
 
-
+console.log("执行我")
 /**
  * ws使用说明：
  * 在客户端send()的数据要求是json对象，对象包含以下属性：

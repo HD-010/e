@@ -57,13 +57,13 @@ function UploadsPlug(data){
                     beforeSend: function(){
                         uploading = true;
                     },
-                    success : function(data) {
-                        console.log(data);
-                        if (data.state == 1) {
-                            (data.successCallback)(data);
-                        } else {
-                            (data.faileCallback)(data);
-                        }
+                    success : function(results) {
+                        console.log("上传文件信息：",data);
+                        try{
+                            results.state ? 
+                            eval((data.successCallback + '(results)')) :
+                            eval((data.faileCallback + '(results)'));
+                        }catch(err){throw(err)}
                         uploading = false;
                     }
                 });
