@@ -9,7 +9,6 @@ function Request(req,res,next){
     if(isRel(req)) return res.render('error',{message: '文件不存在',error:{status: 404,stack:''}});
     var App = new (require('./vendor/esoft/base/App'));
     App.env = 'dev';
-    console.log("=================request start=======",req.originalUrl,"===============")
     //载base对象
     var Base = require('./vendor/esoft/base/Base');
     var base = new Base(App);
