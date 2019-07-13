@@ -155,21 +155,10 @@ function UploadsPlug(data){
             (window.onresize = function() {
                 var win_height = $(window).height();
                 var win_width = $(window).width();
-                
-                if (win_width <= 768) {
-                    $(".tailoring-content").css({
-                        "top ": (win_height - $(".tailoring-content").outerHeight()) / 2,
-                        "left ": 0
-                    });  
-                } else {
-                    var top = (win_height - $(".tailoring-content").outerHeight())/2;
-                    var left = (win_width - $(".tailoring-content").outerWidth())/2;
-
-                    $(".tailoring-content").css({
-                        "top":top,
-                        "left": left
-                    });
-                }
+                $(".tailoring-content").css({
+                    "top":(win_height - $(".tailoring-content").outerHeight())/2,
+                    "left": (win_width <= 768) ? 0 : (win_width - $(".tailoring-content").outerWidth())/2
+                });
             })();
 
             //参数设置项
@@ -199,16 +188,15 @@ function UploadsPlug(data){
                 $(".tailoring-container").toggle();
                 //$('#chooseImg').click();
                 $('#tailoringImg').cropper('destroy');
-
                 //cropper图片裁剪
                 $('#tailoringImg').cropper(option);
+                //重置口尺寸
+                onresize()
             });
 
             //图像上传
             function selectImg(file) {
-                if (!file.files || !file.files[0]) {
-                    return;
-                }
+                if (!file.files || !file.files[0]) return;
                 var reader = new FileReader();
                 reader.onload = function(evt) {
                     var replaceSrc = evt.target.result;
@@ -251,55 +239,39 @@ function UploadsPlug(data){
             
             //裁剪后的处理
             $("#sureCut").on("click", function() {
-                if ($("#tailoringImg").attr("src") == null) {
-                    return false;
-                } else {
-                    var cas = $('#tailoringImg').cropper('getCroppedCanvas'); //获取被裁剪后的canvas
-                    var base64url = cas.toDataURL('image/png'); //转换为base64地址形式
+                if ($("#tailoringImg").attr("src") == null) return false;
                     
-                    if (j.length < 5) {
-                        $('.finalImg').append('<div class="col " style="display:table;float:left; " ><img src="/static/images/default-pic.jpg " id="finalImg'+i+'"  width="150" style="margin-left:10px;margin-top:5px;" /><em class="close " title="删除这张图片" onclick="deleteImage(this) ">×</em></div>');
-                        $("#finalImg" + i).prop("src", base64url); //显示为图片的形式
-                        j.push('finalImg' + i);
+                var cas = $('#tailoringImg').cropper('getCroppedCanvas'); //获取被裁剪后的canvas
+                var base64url = cas.toDataURL('image/png'); //转换为base64地址形式
+                
+                $('.finalImg').append('<div class="col " style="display:table;float:left; " ><img src="/static/images/default-pic.jpg " id="finalImg'+i+'"  width="150" style="margin-left:10px;margin-top:5px;" /><em class="close " title="删除这张图片" onclick="deleteImage(this) ">×</em></div>');
+                $("#finalImg" + i).prop("src", base64url); //显示为图片的形式
+                j.push('finalImg' + i);
 
-                        cas.toBlob(function(blob){
-                            //console.log(blob)
-                            var formData = new FormData();
-                            formData.append('image', blob);
-                            $.ajax({
-                                url:option.url,
-                                type: "post",
-                                cache: false,
-                                data:formData,
-                                contentType: false,
-                                processData: false,
-                                success:function(res){
-                                    res = JSON.parse(res);
-                                    //上传成功
-                                    //console.log(res);
-                                    if(res.state == 1){
-                                        console.log(res);
-                                        upProcess(res);
-                                        //$('form[name="edit"]').append('<input type="hidden" data-type="icon" id="iconfinalImg'+(i-1)+'" name="icon'+ (i-1) +'" value="' + res.data + '"/>');
-                                    }
-                                    //上传失败
-                                    else{
-                                        alert('上传失败，请重新上传！');
-                                    }
-                                }
-                            });
-                        });
-                        i++;
-                    } else {
-                        alert("只允许上传5张图片 ");
-                        $(".tailoring-container").toggle();
-                        //$('#tailoringImg').cropper('destroy');
-                        closeTailor();
-                    }
-                    
-                    //关闭裁剪框
-                    closeTailor();
-                }
+                cas.toBlob(function(blob){
+                    //console.log(blob)
+                    var formData = new FormData();
+                    formData.append('image', blob);
+                    $.ajax({
+                        url:option.url,
+                        type: "post",
+                        cache: false,
+                        data:formData,
+                        contentType: false,
+                        processData: false,
+                        success:function(res){
+                            res = JSON.parse(res);
+                            //console.log(res);
+                            //上传成功
+                            if(res.state == 1) return upProcess(res);
+                            //上传失败
+                            alert('上传失败，请重新上传！');
+                        }
+                    });
+                });
+                i++;
+                //关闭裁剪框
+                closeTailor();
             });
             //关闭裁剪框
             function closeTailor() {
