@@ -80,6 +80,7 @@ global.treeValue = function(array,key1,value,key2,all) {
  * 必填参数 data: 被构造的原对象
  */
 global.treeStrcut = function (data, fa, strucData){
+	if(!data.length) return [];
 	fa = fa || data[0].pid;
 	strucData = strucData || [];
 	if(!strucData.length) {
