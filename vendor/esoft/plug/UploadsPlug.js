@@ -184,7 +184,7 @@ function UploadsPlug(data){
             }
 
             //弹出图片裁剪框
-            $("#replaceImg").on("click", function() {
+            $("#replaceImg").on("click",function(){
                 $(".tailoring-container").toggle();
                 //$('#chooseImg').click();
                 $('#tailoringImg').cropper('destroy');
@@ -192,7 +192,7 @@ function UploadsPlug(data){
                 $('#tailoringImg').cropper(option);
                 //重置口尺寸
                 onresize()
-            });
+            })
 
             //图像上传
             function selectImg(file) {
