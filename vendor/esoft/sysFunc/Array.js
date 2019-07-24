@@ -102,3 +102,29 @@ global.treeStrcut = function (data, fa, strucData){
 		
 	return strucData;
 }
+
+/**
+ * 从对象中获取与list中值相同键名称的对象
+ * @param {object | array} obj 对象结构对象
+ * @param {array} list 键名列表
+ */
+global.list = function(obj,keys){
+	if(typeof obj != 'object') return [];
+	var tem;
+	if(obj.constructor.name == 'Object' || obj.constructor.name == 'RowDataPacket'){
+		tem = {};
+		for(var i = 0; i < keys.length; i ++) tem[keys[i]] = obj[keys[i]];
+	}else{
+		tem = [];
+		for(var i = 0; i < obj.length; i ++) tem.push(list(obj[i],keys));
+	}
+	return tem;
+}
+
+/**
+ * 数据元素求和
+ */
+global.sum = function(arr){
+	eval(('var sum = ' + arr.join('+')));
+	return sum;
+}
