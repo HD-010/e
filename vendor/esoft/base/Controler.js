@@ -99,7 +99,6 @@ Controler.prototype.renderJson = function(data) {
  */
 Controler.prototype.testRender = function(data,ps,view,auto){
     ps --;
-    if(data.error || !ps) return view ? this.render(data) : this.render(data, view);
     view = view || auto;
     if(data.error || !ps) return auto ? this.render(data, view) : this.render(data, view, auto);
 
