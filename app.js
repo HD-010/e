@@ -7,6 +7,7 @@ router.post('/*',(req,res,next)=>{new Request(req,res,next)});
 
 function Request(req,res,next){
     if(isRel(req)) return res.render('error',{message: '文件不存在',error:{status: 404,stack:''}});
+    
     var App = new (require('./vendor/esoft/base/App'));
     App.env = 'dev';
     //载base对象

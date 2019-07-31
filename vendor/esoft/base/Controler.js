@@ -73,6 +73,8 @@ Controler.prototype.render = function(data, view, auto) {
     this.res.render(path, data);
 }
 
+
+
 /**
  * 向客户端返回json对象
  */
@@ -89,6 +91,43 @@ Controler.prototype.renderJson = function(data) {
     if(backUri) _data.uri = backUri;
     this.res.json(_data);
     return;
+}
+
+
+
+/**
+ * api接口返回json数据，errcode 1失败，data失败原因，errcode 0成功，data成功数据
+ */
+Controler.prototype.sendJson = function(errcode,data) {
+    let _data={errcode:errcode}
+    if(errcode==0){
+        _data.data=data;
+    }else{
+        _data.errcode=1;
+        _data.msg=data;
+    }
+    this.res.json(_data);
+}
+
+
+/**
+ * 检查参数
+ */
+Controler.prototype.checkParm = function(list) {
+    let obj={errcode:0,errlist:[],data:{}};
+    for(let i=0;i<list.length;i++){
+        let ky=list[i];
+        let tmp = this.POST(ky,{default: ""});
+        if(ky.substr(0,1)=="!"){
+            ky = ky.substr(1);
+        }
+        obj.data[ky]=tmp;
+        if(tmp == ""){
+            obj.errcode=1;
+            obj.errlist.push(ky);
+        }
+    }
+    return obj;
 }
 
 /**
@@ -138,6 +177,7 @@ Controler.prototype.redirect = function(uri){
 Controler.prototype.authority = function(){
     return that.res.authority;
 }
+
 
 
 
