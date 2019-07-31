@@ -136,11 +136,14 @@ Controler.prototype.checkParm = function(list) {
  * 结构如：{error:0,results:res}
  * ps number 步查看的子进程数 
  */
-Controler.prototype.testRender = function(data,ps,view){
+Controler.prototype.testRender = function(data,ps,view,auto){
     ps --;
-    if(data.error || !ps) return view ? this.render(data) : this.render(data, view);
+    view = view || auto;
+    if(data.error || !ps) return auto ? this.render(data, view) : this.render(data, view, auto);
+
     return ps;
 }
+
 
 /**
  * 尝试返回json，如查控制器中查询未结束，则不返回

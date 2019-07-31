@@ -194,7 +194,7 @@ function MysqlStruct(){
         //判断是否为函数名称
         for(var i = 0; i < this.systemKey.length; i ++){
             var sysKey = this.systemKey[i];
-            if(checked.toString().toUpperCase().indexOf(sysKey) === 0) return false;
+            if(checked && (checked.toString().toUpperCase().indexOf(sysKey)) === 0) return false;
         }
 
         return true;
