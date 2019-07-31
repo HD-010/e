@@ -120,6 +120,14 @@ function Base(){
         req.eState.model.state = 1;
     };
 
+    /**
+     * 初始化响应对象
+     */
+    this.initRespons = function(res){
+        var respons = new (require('./Respons'))();
+        return respons.init(res);
+    }
+
     //初始化数据库连接服务,创建的连接或连接池是一个超全局对象
     this.initDBService = function(req){
         //if(App.dBService.state) return;

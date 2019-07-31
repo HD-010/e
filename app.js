@@ -25,6 +25,8 @@ function Request(req,res,next){
     base.initService(req);
     //初始化插件类
     base.initPlug(req);
+    //初始化响应对象
+    base.initRespons(res);
 
     //实例化behavior
     var behavior = base.initBehavior(req);

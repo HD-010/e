@@ -66,10 +66,12 @@ Controler.prototype.render = function(data, view, auto) {
         view = view || '';
     if (view && (typeof view != 'boolean')) {
         path = (view.indexOf('/') == -1) ?
-            path.substr(0, path.lastIndexOf('/') + 1) + view: view.substr(1);
+        path.substr(0, path.lastIndexOf('/') + 1) + view: 
+        view.substr(1);
     }
     data.viewPath =  this.req.eState.root + '/views/' + path + '.html';
     data.config =  this.req.eState.param();
+    
     this.res.render(path, data);
 }
 
@@ -140,6 +142,7 @@ Controler.prototype.redirect = function(uri){
 Controler.prototype.authority = function(){
     return that.res.authority;
 }
+
 
 
 
