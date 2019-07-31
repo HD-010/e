@@ -15,7 +15,7 @@ global.keyExists = function(array,key){
  * 方法根据key1=>value在array中查找相对的对象，并返回对象(中key2的值),或返回符合条件的所有对象
  * array array 被查找的多个对象的数组
  * key1 用于匹配的键
- * value 用于匹配的键对应的值
+ * value 用于匹配的键对应的值,!value 表示取返回，用于匹配不等于value的值
  * key2 string  null | key2  null 返回匹配对象， key2 返回匹配对象中 key2 的值
  * all boolean true 返回所有匹配的集合，false 返回第一次匹配               
  */
@@ -25,11 +25,20 @@ global.array2value = function(array,key1,value,key2,all) {
     if(typeof key2 == 'boolean') {
         all = key2;
         key2 = undefined;
-    }
-    var temObj = [];
+	}
+	var temObj = [];
+	var valStr = value + '';
+	var tag = valStr.indexOf("!")+1;
+	if(tag) value = (valStr.length > 1) ? valStr.substring(tag - 1) : '';
     for(var i = 0; i < array.length; i ++){
-        if((array[i][key1] == value) && !all) return key2 ? array[i][key2] : array[i];
-        if((array[i][key1] == value) && all) key2 ? temObj.push(array[i][key2]) : temObj.push(array[i]);
+		if(tag){
+			if((array[i][key1] != value) && !all) return key2 ? array[i][key2] : array[i];
+			if((array[i][key1] != value) && all) key2 ? temObj.push(array[i][key2]) : temObj.push(array[i]);
+		}else{
+			if((array[i][key1] == value) && !all) return key2 ? array[i][key2] : array[i];
+			if((array[i][key1] == value) && all) key2 ? temObj.push(array[i][key2]) : temObj.push(array[i]);
+		}
+        
 	}
 	return temObj.length ? temObj : '';
 }
