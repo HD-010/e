@@ -19,7 +19,8 @@ function Redis(){
     this.set = function(name,data,callback){
         data = data || {};
         if(typeof data === 'object') data = JSON.stringify(data);
-        this.client.set(this.configures.prefixed + name,data,(err,resusts) => {
+        var perfixed = appConf('database.Redis.prefixed') || '';
+        this.client.set(perfixed + name,data,(err,resusts) => {
             if(typeof callback === 'function'){
                 callback(err,resusts);
             }
@@ -30,7 +31,8 @@ function Redis(){
      * 获取数据
      */
     this.get = function(name,callback){
-        this.client.get(this.configures.prefixed + name,function(err,results){
+        var perfixed = appConf('database.Redis.prefixed') || '';
+        this.client.get(perfixed,function(err,results){
             if(err) return callback(err,{});
             var data;
             try{
