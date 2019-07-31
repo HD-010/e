@@ -57,7 +57,7 @@ global.treeValue = function(array,key1,value,key2,all) {
 			if(item[k].constructor.name == 'Array'){
 				var values = treeValue(item[k],key1,value,key2,all);
 				(values.constructor.name == 'Array') ?
-				 mergerObj([temObj,values]) :
+				 mergeObj([temObj,values]) :
 				 temObj = values;
 			}else{
 				if((k == key1) && (item[k] == value) && !all){
@@ -71,7 +71,7 @@ global.treeValue = function(array,key1,value,key2,all) {
 		}
 	}
     
-	return temObj.length ? temObj : '';
+	return temObj;
 }
 
 /**
