@@ -144,6 +144,7 @@ function Mysql(){
         
                     for(var i = 0; i < results.length; i ++){
                         results[i] = mergeObj([results[i],params.fields[0]])
+                        console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&:results:",results);
                     }
                     params.fields = results;
     
@@ -292,8 +293,7 @@ function Mysql(){
         var sql = 'insert into ' + params.table + ' ' + 
         sqlStruct.insertNames() +
         sqlStruct.insertValues();
-        
-        this.select(sql,function(error,results,fields){
+        this.query(sql,function(error,results,fields){
             callback(error,results,fields);
         });
     }

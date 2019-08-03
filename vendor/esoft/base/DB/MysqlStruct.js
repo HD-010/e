@@ -1,7 +1,7 @@
 function MysqlStruct(){
     //声明系统（用户自定义）函数名称,在后续判断中，
     //如果是函数名称的值将不加引号
-    this.systemKey = ['NOW','COUNT','SUM'];
+    this.systemKey = ['NOW','COUNT','SUM','DATE_FORMAT'];
 
     this.struct ={
         where  : [],
@@ -14,13 +14,12 @@ function MysqlStruct(){
         console.log("this is MysqlStruct");
     }
 
-    this.init = function(struct){
+    this.init = function(struct, tag){
         //过滤不安全字符
         for(var i in struct){
-            if(typeof struct[i] === 'function') continue;
             for(var k = 0; k < struct[i].length; k ++){
-                if (typeof struct[i][k] === 'string') struct[i][k] = struct[i][k].replace(/[?]/g,'');
-                if (typeof struct[i][k] === 'number') struct[i][k] = struct[i][k];
+                if(typeof struct[i][k] === 'string') struct[i][k] = struct[i][k].replace(/[?]/g,'');
+                if(typeof struct[i][k] === 'number') struct[i][k] = struct[i][k];
             }
         }
         this.struct = struct;
@@ -135,11 +134,13 @@ function MysqlStruct(){
      */
     this.insertValues = function(){
         var values = '';
+        var check;
         for(var j = 0; j < this.struct.length; j++ ){
             var value   = '';
                 values += ',(';
             for (var i in this.struct[j]) {
-                if(typeof this.struct[j][i] === 'function') continue;
+                check = this.struct[j][i];
+                if((typeof check == 'object') && (check != null)) this.struct[j][i] = dateFormate('%Y-%m-%d %H:%M:%S',new Date(check));
                 value += this.sqlString(this.struct[j][i]) ?
                 (",'" + this.struct[j][i] + "'"): 
                 ("," + this.struct[j][i]);
@@ -190,11 +191,11 @@ function MysqlStruct(){
         //判断布尔值类型
         if(typeof checked === 'boolean') return false;
         //判断空对象类型
-        if(typeof checked === 'object') return false;
+        if((typeof checked === 'object') && !checked) return false;
         //判断是否为函数名称
         for(var i = 0; i < this.systemKey.length; i ++){
             var sysKey = this.systemKey[i];
-            if(checked && (checked.toString().toUpperCase().indexOf(sysKey)) === 0) return false;
+            if(checked && (checked.toString().toUpperCase().indexOf(sysKey))+1) return false;
         }
 
         return true;
