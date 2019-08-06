@@ -1,7 +1,7 @@
 var fs = require('fs');
 var wsProcess = require('./wsProcess');
 
-
+console.log("执行我")
 /**
  * ws使用说明：
  * 在客户端send()的数据要求是json对象，对象包含以下属性：
@@ -10,6 +10,7 @@ var wsProcess = require('./wsProcess');
  * @param {*} request 
  */
 function ws(request){
+    console.log(request)
     if (!originIsAllowed(request.origin)) {
       // Make sure we only accept requests from an allowed origin
       request.reject();
@@ -69,6 +70,7 @@ function ws(request){
 function originIsAllowed(origin) {
     // put logic here to detect whether the specified origin is allowed.
     return true;
+    
 }
 
 

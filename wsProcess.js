@@ -7,7 +7,7 @@ function wsProcess(req,res){
     var status =  1;
     var App = new (require('./vendor/esoft/base/App'));
     App.env = 'dev';
-    
+
     //载base对象
     var Base = require('./vendor/esoft/base/Base');
     var base = new Base(App);
@@ -36,6 +36,7 @@ function wsProcess(req,res){
     });
     
     function interaction(){
+       
         status --;
         if(status === 0){
             //实例化控制器

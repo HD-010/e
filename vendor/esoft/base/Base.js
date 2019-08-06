@@ -51,6 +51,7 @@ function Base(App){
         //控制器路径
         var controlDir  = App.param('controlDir');
         var controlPath = this.processControlerPath(controlDir,'Controler');
+       
         // console.log(controlPath);
         //载入控制器
         if(!fs.existsSync(controlPath + '.js')) {
@@ -61,6 +62,7 @@ function Base(App){
             };
         }
         var control                    = require(controlPath);
+     
         var Controler                  = require('./Controler');
             Controler.prototype.router = this.router;
             Controler.prototype.app    = App;

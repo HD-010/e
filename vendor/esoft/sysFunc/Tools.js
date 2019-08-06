@@ -82,3 +82,41 @@ global.recodeBase64decode = function(recods,key){
 	}
 	return recods;
 }
+
+
+
+/**
+ * 取出想要的字段
+ * results 传入查询出来的对象
+ * fieldarr 要取出的字段数组
+ * key 默认为1 为true 表示是多个对象 为0 表示就一个对象 默认为1
+ */
+global.getNewData = function(results,fieldarr,key=true){
+	if(!fieldarr instanceof Array || fieldarr.length==0) return results;
+	let data =[];
+	if(key){
+		for(let i in results){
+			let obj = new Object();
+			for(let j in fieldarr){
+				obj[fieldarr[j]] = results[i][fieldarr[j]];
+			}
+			data.push(obj)
+		}
+		return data;
+	}else{
+		if(results.length < 2 ){
+			let ob = new Object();
+			for(let i in results){			
+				for(let j in fieldarr){
+					ob[fieldarr[j]] = results[i][fieldarr[j]];
+				}
+			}
+			
+			return ob;
+		}else{
+			getNewData(results,fieldarr,true)
+		}
+		
+	}
+	
+}
