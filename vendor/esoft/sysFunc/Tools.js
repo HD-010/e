@@ -104,13 +104,14 @@ global.getNewData = function(results,fieldarr,key=true){
 		}
 		return data;
 	}else{
-		if(results.length>1){
+		if(results.length < 2 ){
 			let ob = new Object();
 			for(let i in results){			
 				for(let j in fieldarr){
 					ob[fieldarr[j]] = results[i][fieldarr[j]];
 				}
-			}	
+			}
+			
 			return ob;
 		}else{
 			getNewData(results,fieldarr,true)
