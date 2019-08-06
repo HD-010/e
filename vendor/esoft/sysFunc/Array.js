@@ -15,7 +15,8 @@ global.keyExists = function(array,key){
  * 方法根据key1=>value在array中查找相对的对象，并返回对象(中key2的值),或返回符合条件的所有对象
  * array array 被查找的多个对象的数组
  * key1 用于匹配的键
- * value 用于匹配的键对应的值
+ * value 用于匹配的键对应的值,格式为：'比较运算符值',如：'>=10'。表示查找value为大于等于10的项，
+ * 可用比较运算符有：>、<、=、<>、>=、<=、!=
  * key2 string  null | key2  null 返回匹配对象， key2 返回匹配对象中 key2 的值
  * all boolean true 返回所有匹配的集合，false 返回第一次匹配               
  */
@@ -25,11 +26,18 @@ global.array2value = function(array,key1,value,key2,all) {
     if(typeof key2 == 'boolean') {
         all = key2;
         key2 = undefined;
-    }
-    var temObj = [];
+	}
+	var temB;
+	var temObj = [];
+	var valStr = value + '';
+	var tag = valStr.match(/(^[!=<>]{1,3})/g);
+	if(tag) value = valStr.substr(tag.length + 1);
+	tag = tag ? tag[0] : '==';
     for(var i = 0; i < array.length; i ++){
-        if((array[i][key1] == value) && !all) return key2 ? array[i][key2] : array[i];
-        if((array[i][key1] == value) && all) key2 ? temObj.push(array[i][key2]) : temObj.push(array[i]);
+		eval(('temB = (array[i][key1]' + tag  + 'value)'));
+		if(!temB) continue;
+		if(!all) return key2 ? array[i][key2] : array[i];
+		key2 ? temObj.push(array[i][key2]) : temObj.push(array[i]);
 	}
 	return temObj.length ? temObj : '';
 }
@@ -38,7 +46,8 @@ global.array2value = function(array,key1,value,key2,all) {
  * 方法根据key1=>value在array中查找相对的对象，并返回对象(中key2的值),或返回符合条件的所有对象
  * array array 被查找的多个对象的数组
  * key1 用于匹配的键
- * value 用于匹配的键对应的值
+ * value 用于匹配的键对应的值,格式为：'比较运算符值',如：'>=10'。表示查找value为大于等于10的项，
+ * 可用比较运算符有：>、<、=、<>、>=、<=、!=
  * key2 string  null | key2  null 返回匹配对象， key2 返回匹配对象中 key2 的值
  * all boolean true 返回所有匹配的集合，false 返回第一次匹配               
  */
@@ -51,27 +60,28 @@ global.treeValue = function(array,key1,value,key2,all) {
         key2 = undefined;
     }
 	var temObj = [];
+	var valStr = value + '';
+	var tag = valStr.match(/(^[!=<>]{1,3})/g);
+	if(tag) value = valStr.substr(tag.length + 1);
+	tag = tag ? tag[0] : '==';
 	for(var i in array){
 		var item = array[i];
 		for(var k in item){
 			if(item[k].constructor.name == 'Array'){
 				var values = treeValue(item[k],key1,value,key2,all);
 				(values.constructor.name == 'Array') ?
-				 mergeObj([temObj,values]) :
-				 temObj = values;
+				mergeObj([temObj,values]) :
+				temObj = values;
 			}else{
-				if((k == key1) && (item[k] == value) && !all){
-					temObj = key2 ? item[key2] : item;
-					break;
-				}
-        		if((k == key1) && (item[k] == value) && all){
-					key2 ? temObj.push(item[key2]) : temObj.push(item);
-				} 
+				eval(('temB = (array[i][key1]' + tag  + 'value)'));
+				if(!temB) continue;
+				if(!all) return key2 ? array[i][key2] : array[i];
+				key2 ? temObj.push(array[i][key2]) : temObj.push(array[i]);
 			}
 		}
 	}
     
-	return temObj.length ? temObj : '';
+	return temObj;
 }
 
 /**

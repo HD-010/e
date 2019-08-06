@@ -145,6 +145,14 @@ function Base(App){
         App.model.state = 1;
     };
 
+    /**
+     * 初始化响应对象
+     */
+    this.initRespons = function(res){
+        var respons = new (require('./Respons'))();
+        return respons.init(res);
+    }
+
     //初始化数据库连接服务
     this.initDBService = function(){
         //if(App.dBService.state) return;
