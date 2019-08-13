@@ -1,3 +1,10 @@
+/*
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-05-27 09:47:19
+ * @LastEditTime: 2019-08-13 15:22:01
+ * @LastEditors: Please set LastEditors
+ */
 function MysqlStruct(){
     //声明系统（用户自定义）函数名称,在后续判断中，
     //如果是函数名称的值将不加引号
