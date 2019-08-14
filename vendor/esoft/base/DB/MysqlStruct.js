@@ -1,3 +1,10 @@
+/*
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-05-27 09:47:19
+ * @LastEditTime: 2019-08-14 14:20:01
+ * @LastEditors: Please set LastEditors
+ */
 function MysqlStruct(){
     //声明系统（用户自定义）函数名称,在后续判断中，
     //如果是函数名称的值将不加引号
@@ -142,7 +149,7 @@ function MysqlStruct(){
                 check = this.struct[j][i];
                 if((typeof check == 'object') && (check != null)) this.struct[j][i] = dateFormate('%Y-%m-%d %H:%M:%S',new Date(check));
                 value += this.sqlString(this.struct[j][i]) ?
-                (",'" + this.struct[j][i] + "'"): 
+                (",'" + trim(this.struct[j][i]) + "'"): 
                 ("," + this.struct[j][i]);
             }
             value   = value.substr(1);
@@ -173,7 +180,7 @@ function MysqlStruct(){
         for(var i in this.struct.feilds){
             if(typeof this.struct.feilds[i] === 'function') continue;
             feilds += this.sqlString(this.struct.feilds[i]) ?
-             ',`' + i + "` = '" + this.struct.feilds[i] + "'": 
+             ',`' + i + "` = '" + trim(this.struct.feilds[i]) + "'": 
              ',`' + i + "` = " + this.struct.feilds[i];
         }
 
