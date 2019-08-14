@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-05-27 09:47:19
- * @LastEditTime: 2019-08-13 15:22:01
+ * @LastEditTime: 2019-08-14 12:44:59
  * @LastEditors: Please set LastEditors
  */
 function MysqlStruct(){
@@ -149,7 +149,7 @@ function MysqlStruct(){
                 check = this.struct[j][i];
                 if((typeof check == 'object') && (check != null)) this.struct[j][i] = dateFormate('%Y-%m-%d %H:%M:%S',new Date(check));
                 value += this.sqlString(this.struct[j][i]) ?
-                (",'" + this.struct[j][i] + "'"): 
+                (",'" + trim(this.struct[j][i]) + "'"): 
                 ("," + this.struct[j][i]);
             }
             value   = value.substr(1);
@@ -180,7 +180,7 @@ function MysqlStruct(){
         for(var i in this.struct.feilds){
             if(typeof this.struct.feilds[i] === 'function') continue;
             feilds += this.sqlString(this.struct.feilds[i]) ?
-             ',`' + i + "` = '" + this.struct.feilds[i] + "'": 
+             ',`' + i + "` = '" + trim(this.struct.feilds[i]) + "'": 
              ',`' + i + "` = " + this.struct.feilds[i];
         }
 
