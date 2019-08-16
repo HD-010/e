@@ -1,3 +1,10 @@
+/*
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-05-27 09:47:19
+ * @LastEditTime: 2019-08-14 17:11:46
+ * @LastEditors: Please set LastEditors
+ */
 /**
  * 说明：该类实例化为DBservice的一个属性。
  * 可以通过this.app.dBService.init(DBName)进行实例化。也可以在controler,model,service中调用Common的方法：this.DB()进行实例化。
@@ -144,7 +151,6 @@ function Mysql(){
         
                     for(var i = 0; i < results.length; i ++){
                         results[i] = mergeObj([results[i],params.fields[0]])
-                        console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&:results:",results);
                     }
                     params.fields = results;
     
