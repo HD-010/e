@@ -1,3 +1,10 @@
+/*
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-05-27 09:47:19
+ * @LastEditTime: 2019-08-17 10:31:05
+ * @LastEditors: Please set LastEditors
+ */
 /**
  * 检测给定的值是否在数组中，如果在则返回true。不在则返回false
  * @param {*} array 
@@ -137,4 +144,21 @@ global.list = function(obj,keys){
 global.sum = function(arr){
 	eval(('var sum = ' + arr.join('+')));
 	return sum;
+}
+
+/**
+ * 数组去重
+ */
+global.arrayDistinct = function(arr){
+	var tempArr = [];
+	var tempObj = {};
+	if(arr.constructor.name != 'Array') return tempArr;
+	for(var i of arr){
+		if(!tempObj[i]){
+			tempArr.push(i);
+			tempObj[i] = 1;
+		}
+	}
+	
+	return tempArr;
 }
