@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-05-27 09:47:19
- * @LastEditTime: 2019-08-19 11:18:18
+ * @LastEditTime: 2019-08-19 14:24:34
  * @LastEditors: Please set LastEditors
  */
 /**
@@ -173,6 +173,24 @@ global.sum = function(arr){
 	eval(('var sum = ' + arr.join('+')));
 	return sum;
 }
+
+/**
+ * 数组去重
+ */
+global.arrayDistinct = function(arr){
+	var tempArr = [];
+	var tempObj = {};
+	if(arr.constructor.name != 'Array') return tempArr;
+	for(var i of arr){
+		if(!tempObj[i]){
+			tempArr.push(i);
+			tempObj[i] = 1;
+		}
+	}
+	
+	return tempArr;
+}
+
 
 /**
  * 判断与reg字符串相匹配的字符是否为数组中的元素,是则返回元素对应的索引，否则返回-1
