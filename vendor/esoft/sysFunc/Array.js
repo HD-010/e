@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-05-27 09:47:19
- * @LastEditTime: 2019-08-17 10:31:05
+ * @LastEditTime: 2019-08-19 11:03:48
  * @LastEditors: Please set LastEditors
  */
 /**
@@ -161,4 +161,15 @@ global.arrayDistinct = function(arr){
 	}
 	
 	return tempArr;
+}
+
+/**
+ * 判断与reg字符串相匹配的字符是否为数组中的元素
+ */
+global.inArray = function(arr, reg){
+	reg = new this.RegExp(reg);
+	for(var i = 0; i < arr.length; i ++){
+		if(arr[i].match(reg)) return i;
+	}
+	return -1;
 }
