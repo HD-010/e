@@ -1,3 +1,10 @@
+/*
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-05-27 09:47:19
+ * @LastEditTime: 2019-08-19 11:18:18
+ * @LastEditors: Please set LastEditors
+ */
 /**
  * 检测给定的值是否在数组中，如果在则返回true。不在则返回false
  * @param {*} array 
@@ -165,4 +172,22 @@ global.list = function(obj,keys){
 global.sum = function(arr){
 	eval(('var sum = ' + arr.join('+')));
 	return sum;
+}
+
+/**
+ * 判断与reg字符串相匹配的字符是否为数组中的元素,是则返回元素对应的索引，否则返回-1
+ * arr 数组 如：var a = ['sdf', 'werfw']
+ * reg 匹配的字符
+ * 调用如：
+ * inArray(a,'sd')  //0
+ * inArray(a,'^sd') //0
+ * inArray(a,'fw')  //1 
+ * inArray(a,'fw$')  //1 
+ */
+global.inArray = function(arr, reg){
+	reg = new this.RegExp(reg);
+	for(var i = 0; i < arr.length; i ++){
+		if(arr[i].match(reg)) return i;
+	}
+	return -1;
 }
