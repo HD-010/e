@@ -30,7 +30,8 @@ global.mergeObj = function(objs){
 		});
 		return false;
 	}
-	for(var i = 1; i < objs.length; i++){
+	var obj = new Object();
+	for(var i = 0; i < objs.length; i++){
 		if(objs[i].constructor !== Object){
 			console.log({
 				error  : 1,
@@ -39,10 +40,10 @@ global.mergeObj = function(objs){
 			return false;
 		}
 		for(var k in objs[i]){
-			objs[0][k] = objs[i][k];
+			obj[k] = objs[i][k];
 		}
 	}
-    return objs[0];
+    return obj;
 }
 
 /**
