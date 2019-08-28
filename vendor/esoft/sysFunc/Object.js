@@ -1,3 +1,10 @@
+/*
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-05-27 09:47:19
+ * @LastEditTime: 2019-08-28 12:07:18
+ * @LastEditors: Please set LastEditors
+ */
 /**
  * 合并多个对象
  * 

@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-05-27 09:47:19
- * @LastEditTime: 2019-08-14 17:11:46
+ * @LastEditTime: 2019-08-28 17:35:25
  * @LastEditors: Please set LastEditors
  */
 /**
@@ -37,9 +37,11 @@ function Mysql(){
 
     this.select = this.insert = this.update = this.delete = this.query = function(sql,callback){
         var that = this;
-        if(this.withLog) this.sqlLog(sql);
+        //if(this.withLog) this.sqlLog(sql);
+        this.sqlLog(sql);
         this.connection.getConnection(function(error,connection){
             if(error) throw(error);
+            sql = sql.replace(/#@/g,appConf('database.Mysql.prefixed'));
             connection.query(sql,function(error,results,fields){
                 if(error) throw(error);
                 connection.release(); 
@@ -133,66 +135,34 @@ function Mysql(){
          * 保存字段对应的数据
          */
         function set(){
-            //if(!params.where || !params.where.length) params.where = ["id='#'"];        //当没有传where参数时，默认新增记录
-            
             if(!params.where || !params.where.length){
-                if(this.withLog) this.withLog = 1;
+                //if(this.withLog) this.withLog = 1;
                 that.add(params,function(error,results,fields){
                     callback(error,results,fields);
                 });
             }else{
                 that.get({
                     table : params.table,
-                    where : params.where,
-                    fields : []
+                    where : params.where
                 },function(error,results,fields){
                     if(error) throw('错误：保存数据失败，调取源数据失败');
-                    params.table = table;
-        
+                    //params.table = table;
+                    log('0000000000000000000000查询到：',results)
                     for(var i = 0; i < results.length; i ++){
                         results[i] = mergeObj([results[i],params.fields[0]])
                     }
+                    log('1111111111111111111111待合并：',results)
                     params.fields = results;
-    
                     that.del(params,function(error,results,fields){
                         if(error) throw("错误：删除源数据失败");
-                        if(this.withLog) this.withLog = 1;
+                        //if(this.withLog) this.withLog = 1;
+                        log("333333333333333333333333333333:",params);
                         that.add(params,function(error,results,fields){
                             callback(error,results,fields);
                         });
                     })
                 })
             }
-
-
-            /*that.get({
-                table : params.table,
-                where : params.where,
-                fields : []
-            },function(error,results,fields){
-                if(error) throw('错误：保存数据失败，调取源数据失败');
-                params.table = table;
-    
-                if(results.length){
-                    for(var i = 0; i < results.length; i ++){
-                        results[i] = mergeObj([results[i],params.fields[0]])
-                    }
-                    params.fields = results;
-    
-                    that.del(params,function(error,results,fields){
-                        if(error) throw("错误：删除源数据失败");
-                        if(this.withLog) this.withLog = 1;
-                        that.add(params,function(error,results,fields){
-                            callback(error,results,fields);
-                        });
-                    })
-                }else{
-                    if(this.withLog) this.withLog = 1;
-                    that.add(params,function(error,results,fields){
-                        callback(error,results,fields);
-                    });
-                }
-            })*/
         }
 
         /**
@@ -226,7 +196,8 @@ function Mysql(){
         function addFields(callback){
             if(params.fields){
                 var fields = params.fields;
-                var field,addonSql,beAddFields = '';
+                var field,addonSql;
+                var beAddFields = [];
                 var morfields = 0;
                 var schema = queryresultKeyValue(dbSchema[table],'COLUMN_NAME');
                 var addonAttr = {
@@ -237,18 +208,18 @@ function Mysql(){
                 for(var i = 0; i < fields.length; i ++){
                     field = fields[i];
                     for(var k in field){
-                        if(schema.indexOf(k) === -1){
+                        if(!(schema.indexOf(k)+1)){
                             morfields = 1;
                             log("创建"+k+"字段")
                             //组织被添加的字段名称和数据类型
-                            beAddFields += ' ,' + k + ' ' +addonAttr[typeof(field[k])] 
+                            beAddFields.push( '`' + k + '` ' +addonAttr[typeof(field[k])]); 
                         }
                     }
                 }
                 
                 if(!morfields) return callback();
                 //如：alter table ranyun_test add (sex float(11) ,cash float(11))
-                addonSql = 'alter table ' + table  + ' add (' + beAddFields.substr(2) + ')';
+                addonSql = 'alter table ' + table  + ' add (' + beAddFields.join(',') + ')';
                 that.query(addonSql,callback);
             }
         }
