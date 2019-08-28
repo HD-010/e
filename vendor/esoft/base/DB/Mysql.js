@@ -136,7 +136,7 @@ function Mysql(){
          */
         function set(){
             if(!params.where || !params.where.length){
-                //if(this.withLog) this.withLog = 1;
+                if(this.withLog) this.withLog = 1;
                 that.add(params,function(error,results,fields){
                     callback(error,results,fields);
                 });
@@ -146,17 +146,13 @@ function Mysql(){
                     where : params.where
                 },function(error,results,fields){
                     if(error) throw('错误：保存数据失败，调取源数据失败');
-                    //params.table = table;
-                    log('0000000000000000000000查询到：',results)
                     for(var i = 0; i < results.length; i ++){
                         results[i] = mergeObj([results[i],params.fields[0]])
                     }
-                    log('1111111111111111111111待合并：',results)
                     params.fields = results;
                     that.del(params,function(error,results,fields){
                         if(error) throw("错误：删除源数据失败");
-                        //if(this.withLog) this.withLog = 1;
-                        log("333333333333333333333333333333:",params);
+                        if(this.withLog) this.withLog = 1;
                         that.add(params,function(error,results,fields){
                             callback(error,results,fields);
                         });
