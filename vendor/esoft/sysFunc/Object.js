@@ -39,7 +39,8 @@ global.mergeObj = function(objs){
 	}
 	var obj = new Object();
 	for(var i = 0; i < objs.length; i++){
-		if(objs[i].constructor !== Object){
+		if((objs[i].constructor.name != 'Object') && 
+		(objs[i].constructor.name != 'RowDataPacket')){
 			console.log({
 				error  : 1,
 				message: '传参数的元素必须是对象'
