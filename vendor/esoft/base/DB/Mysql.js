@@ -35,6 +35,25 @@ function Mysql(){
         this.withLog = 0;
     }
 
+    /**
+     * 同步执行sql查询
+     */
+    this.syncSelect = this.syncInsert = this.syncUpdate = this.syncDelete = this.syncQuery = function(sql){
+        return new Promise(resolve =>{
+            this.query(sql, (error, results, fields) => {
+                var data = {
+                    error: error ? 1 : 0,
+                    results: results,
+                    fields: fields
+                }
+                resolve(data);
+            })
+        })
+    };
+
+    /**
+     * 异步执行sql查询
+     */
     this.select = this.insert = this.update = this.delete = this.query = function(sql,callback){
         var that = this;
         //if(this.withLog) this.sqlLog(sql);
