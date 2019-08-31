@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-05-27 09:47:19
- * @LastEditTime: 2019-08-19 11:15:43
+ * @LastEditTime: 2019-08-31 15:25:39
  * @LastEditors: Please set LastEditors
  */
 /**
@@ -39,12 +39,15 @@ global.array2value = function(array,key1,value,key2,all) {
 	var valStr = value + '';
 	var tag = valStr.match(/(^[!=<>]{1,3})/g);
 	if(tag) value = valStr.substr(tag.length + 1);
+	if(typeof value == 'undefined') value = '';
 	tag = tag ? tag[0] : '==';
     for(var i = 0; i < array.length; i ++){
 		eval(('temB = (array[i][key1]' + tag  + 'value)'));
 		if(!temB) continue;
 		if(!all) return key2 ? array[i][key2] : array[i];
-		key2 ? temObj.push(array[i][key2]) : temObj.push(array[i]);
+		key2 ? 
+		temObj.push(typeof array[i][key2] == 'undefined' ? '' : array[i][key2]) : 
+		temObj.push(array[i] );
 	}
 	return temObj.length ? temObj : '';
 }
