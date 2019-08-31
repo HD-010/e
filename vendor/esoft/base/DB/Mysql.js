@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-05-27 09:47:19
- * @LastEditTime: 2019-08-28 17:35:25
+ * @LastEditTime: 2019-08-31 09:16:09
  * @LastEditors: Please set LastEditors
  */
 /**
@@ -70,6 +70,7 @@ function Mysql(){
                 }
                 callback(error,results,fields);
             });
+         
         });
 
     }
