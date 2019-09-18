@@ -1,5 +1,6 @@
 
 function Redis(){
+    let that = this;
     this.configures = {};
     this.client = {};
     this.results = {};
@@ -32,7 +33,7 @@ function Redis(){
      */
     this.get = function(name,callback){
         var perfixed = appConf('database.Redis.prefixed') || '';
-        this.client.get(perfixed,function(err,results){
+        this.client.get(perfixed + name,function(err,results){
             if(err) return callback(err,{});
             var data;
             try{
@@ -41,6 +42,21 @@ function Redis(){
             if(data) results = data;
             return callback(err,results);
         });
+    }
+    this.syncGet = function(name){
+        var perfixed = appConf('database.Redis.prefixed') || '';
+        return new Promise(resolve => {
+            that.client.get(perfixed + name,function(err,results){
+                var data = {};
+                if(err) data.error = 1;
+                try{
+                    data.results = JSON.parse(results);
+                }catch(e){}
+                if(data.results) data.error = 0;
+                resolve(data);
+            });
+        });
+        
     }
 
 }

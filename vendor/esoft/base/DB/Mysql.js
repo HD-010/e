@@ -57,7 +57,7 @@ function Mysql(){
     this.select = this.insert = this.update = this.delete = this.query = function(sql,callback){
         var that = this;
         //if(this.withLog) this.sqlLog(sql);
-        this.sqlLog(sql);
+        //this.sqlLog(sql);
         this.connection.getConnection(function(error,connection){
             if(error) throw(error);
             sql = sql.replace(/#@/g,appConf('database.Mysql.prefixed'));
@@ -111,6 +111,23 @@ function Mysql(){
         this.select(sql,function(error,results,fields){
             callback(error,results,fields);
         });
+    }
+    this.syncGet = async function(params){
+        var sqlStruct = this.initSqlStruct(params);
+        var joinOn = params.joinOn ? params.joinOn : '';
+        sql = 'select ' + 
+        sqlStruct.fields() +
+        ' from ' + 
+        params.table[0] + 
+        joinOn + 
+        sqlStruct.where() + 
+        sqlStruct.having() + 
+        sqlStruct.groupBy() + 
+        sqlStruct.orderBy() + 
+        sqlStruct.limit();
+        
+        return await this.syncSelect(sql);
+        
     }
 
     /**
@@ -196,9 +213,9 @@ function Mysql(){
             
             that.get(params,function(error,results,fields){
                 if(error) throw('错误：调取表结构失败');
-                if(!results.length) throw('错误：数据表'+ table + '不存在');
+                if(!results.length) throw('错误：数据表'+ tableName + '不存在');
                 if(!global.dbSchema) global.dbSchema = [];
-                dbSchema[table]= results;
+                dbSchema[tableName]= results;
                 
                 //判断保存数据对应的字段是不是存在，如果不存在，则动态增加
                 addFields(set)
@@ -259,6 +276,11 @@ function Mysql(){
         this.delete(sql,function(error,results,fields){
             callback(error,results,fields);
         });
+    }
+    this.syncDel = async function(params){
+        var sqlStruct = this.initSqlStruct(params);
+        var sql = 'delete from ' + params.table + ' ' + sqlStruct.where();
+        return await this.syncDelete(sql);
     }
 
     /**
