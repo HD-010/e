@@ -82,10 +82,18 @@ function Model(req) {
         }
     }
 
-    //上传文件
-    this.upload = function(obj){
+    /**
+	 * 上传文件
+	 * @param {Object} obj 
+	 * obj.req
+	 * obj.res
+	 * obj.typeDir	//上传目录是否按日期命名（分类）
+	 * obj.path		//上传目录分类的上级目录
+	 * @param {Object} callback
+	 */
+    this.upload = function(obj, callback){
         console.log('上传的文件信息:',obj.req.files);  // 上传的文件信息
-        var typeDir = "";
+        var typeDir = "";		//上传目录是否按日期命名（分类）
         if(obj.typeDir){
             var d       = new Date();
             var Y       = d.getFullYear();
@@ -115,7 +123,7 @@ function Model(req) {
                         url     : obj.path + typeDir + fileName + '.' + contentType,
                     };
                 }
-                
+                if(typeof callback == 'function') return callback(response);
                 obj.res.end( JSON.stringify( response ) );
             });
         });
