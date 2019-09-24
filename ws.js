@@ -1,5 +1,9 @@
 var fs = require('fs');
+var utility = require('utility');
 var wsProcess = require('./wsProcess');
+global.clients = {};
+clients.id = {};
+clients.total = [];
 
 
 /**
@@ -17,6 +21,10 @@ function ws(request){
       return;
     }
     var connection = request.accept('echo-protocol', request.origin);
+	var currentConnectId = (new Date()).valueOf() + clients.total.length;
+	clients.total.push(currentConnectId);
+	clients.id[currentConnectId] = connection;
+	console.log(clients.total);
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
             //将message.utr8Data对象重组，让其与e框架兼容
