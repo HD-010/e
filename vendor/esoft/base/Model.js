@@ -32,8 +32,10 @@ function Model(req) {
             //记忆当前models所在的modules路径
             if(this.isDiffModule) model.modulePath = this.modelPath.substr(0,this.modelPath.indexOf('/models/'));
             //this.data[modelName] = model;
-        }catch(err){throw(err);}
-            
+        }catch(err){
+			//throw(err);
+		}
+        if(!model) model = new Object(); 
         return model;
     };
 
@@ -89,10 +91,14 @@ function Model(req) {
 	 * obj.res
 	 * obj.typeDir	//上传目录是否按日期命名（分类）
 	 * obj.path		//上传目录分类的上级目录
+	 * obj.callback
 	 * @param {Object} callback
 	 */
-    this.upload = function(obj, callback){
+    this.upload = function(obj){
+		//自定义文件上传处理是程序
+		if(typeof obj.callback == 'function') return obj.callback(obj.req.files);
         console.log('上传的文件信息:',obj.req.files);  // 上传的文件信息
+		//通用文件上传处理是程序
         var typeDir = "";		//上传目录是否按日期命名（分类）
         if(obj.typeDir){
             var d       = new Date();
@@ -123,7 +129,6 @@ function Model(req) {
                         url     : obj.path + typeDir + fileName + '.' + contentType,
                     };
                 }
-                if(typeof callback == 'function') return callback(response);
                 obj.res.end( JSON.stringify( response ) );
             });
         });

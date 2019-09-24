@@ -16,47 +16,46 @@ function ws(request){
       //console.log((new Date()) + ' Connection from origin ' + request.origin + ' rejected.');
       return;
     }
-    
     var connection = request.accept('echo-protocol', request.origin);
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
             //将message.utr8Data对象重组，让其与e框架兼容
             var wsRequest = message.utf8Data;
+			
             try{
                 wsRequest = JSON.parse(wsRequest);
             }catch(error){}
             if(!wsRequest) {
                 wsRequest = {
                     action: '',
-                    query: {},
-                    body: {}
+                    query: new Object(),
+                    body: new Object()
                 }
             }
             //定义req对象
-            var req = {
-                originalUrl : wsRequest.action || '',
-                query: wsRequest.data || {},
-                body:wsRequest.data || {}
-            };
-            //定义res对象
-            var res = {
-                send : connection.sendUTF,
-                json : function(data){
-                    var jsonStr = data;
-                    try{
-                        jsonStr = JSON.stringify(data);
-                    }catch(error){}
-                    connection.sendUTF(jsonStr);
-                }
-            };
+            var req = res = connection;
+			req.originalUrl = wsRequest.action || '';
+			req.query = wsRequest.data || new Object();
+			req.body = wsRequest.data || new Object();
+			req.locals = new Object()
+            
+			//定义res对象
+			res.send = connection.sendUTF;
+			res.json = function(data){
+				var jsonStr = data;
+				try{
+					jsonStr = JSON.stringify(data);
+				}catch(error){}
+				connection.sendUTF(jsonStr);
+			}
             //执行处理程序
             wsProcess(req,res);
-        }
-        else if (message.type === 'binary') {
+        }else if (message.type === 'binary') {
             console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
             
             connection.sendBytes(message.binaryData);
         }
+        
 
     });
   

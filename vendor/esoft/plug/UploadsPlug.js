@@ -260,8 +260,9 @@ function UploadsPlug(data){
                         contentType: false,
                         processData: false,
                         success:function(res){
-                            res = JSON.parse(res);
-                            //console.log(res);
+							try{
+								res = JSON.parse(res);	
+							}catch(e){}
                             //上传成功
                             if(res.state == 1) return upProcess(res);
                             //上传失败

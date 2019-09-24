@@ -5,7 +5,7 @@ function Router() {
         var pathPoint = req.originalUrl.indexOf("?");
         var urlPath = (pathPoint == -1) ? pathname : pathname.substr(0,pathPoint);
         var path = processPathName(urlPath.substr(1).split('/'));
-        if(req.router) throw({error: 1, message: '路由被重置！', point: 'Router.init'});
+        //if(req.router) throw({error: 1, message: '路由被重置！', point: 'Router.init'});
         var router = new Object();
         switch(path.length % 2){
             case 0:
