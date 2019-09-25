@@ -46,5 +46,15 @@ function isRel(req){
     return fs.existsSync(staticDir);
 }
 
+/**
+ * 根据用户id获取客户端对象
+ * @param {Object} uniId    
+ */
+global.uni2cli = function(uniId){
+	if(!uniId) return Object.values(clients);
+	var cliId = uniClients[uniId];
+	return (cliId in clients) ? clients[cliId] : false;
+}
+
 
 module.exports = wsProcess;

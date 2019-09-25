@@ -1,10 +1,8 @@
 var fs = require('fs');
 var utility = require('utility');
 var wsProcess = require('./wsProcess');
-global.clients = {};
-clients.id = {};
-clients.total = [];
-
+global.clients = {};			//连接客户端
+global.uniClients = {};			//与用户id关联的客户端id
 
 /**
  * ws使用说明：
@@ -21,10 +19,21 @@ function ws(request){
       return;
     }
     var connection = request.accept('echo-protocol', request.origin);
-	var currentConnectId = (new Date()).valueOf() + clients.total.length;
-	clients.total.push(currentConnectId);
-	clients.id[currentConnectId] = connection;
-	console.log(clients.total);
+	var currentConnectId = "cli_" + utility.md5(connection.frameHeader);
+	clients[currentConnectId] = connection;
+	
+	connection.send = connection.sendUTF;
+	connection.json = function(data){
+		var jsonStr = data;
+		try{
+			jsonStr = JSON.stringify(data);
+		}catch(error){}
+		connection.sendUTF(jsonStr);
+	}
+	//定义req，res对象
+	var req = res = connection;
+	connection.curCliId = currentConnectId;
+	
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
             //将message.utr8Data对象重组，让其与e框架兼容
@@ -40,31 +49,20 @@ function ws(request){
                     body: new Object()
                 }
             }
-            //定义req对象
-            var req = res = connection;
+            
 			req.originalUrl = wsRequest.action || '';
 			req.query = wsRequest.data || new Object();
 			req.body = wsRequest.data || new Object();
-			req.locals = new Object()
-            
-			//定义res对象
-			res.send = connection.sendUTF;
-			res.json = function(data){
-				var jsonStr = data;
-				try{
-					jsonStr = JSON.stringify(data);
-				}catch(error){}
-				connection.sendUTF(jsonStr);
-			}
+			req.locals = new Object();
+			//将用户id（unid）与客户端id（curCliId)进行关联  
+			//后面逻辑通过全局方法 uni2cli(unid)获取客户端连接对象
+			if(req.body.unid) uniClientId(req.body.unid, currentConnectId);
             //执行处理程序
             wsProcess(req,res);
         }else if (message.type === 'binary') {
             console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
-            
             connection.sendBytes(message.binaryData);
         }
-        
-
     });
   
     connection.on('close', function(reasonCode, description) {
@@ -72,10 +70,18 @@ function ws(request){
     });
 }
 
-
 function originIsAllowed(origin) {
     // put logic here to detect whether the specified origin is allowed.
     return true;
+}
+
+/**
+ * 关联用户id和客户端id
+ * @param {Object} uniId    
+ * @param {Object} clientId
+ */
+function uniClientId(uniId, clientId){
+	uniClients[uniId] = clientId;
 }
 
 
