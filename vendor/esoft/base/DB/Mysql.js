@@ -56,8 +56,8 @@ function Mysql(){
      */
     this.select = this.insert = this.update = this.delete = this.query = function(sql,callback){
         var that = this;
-        //if(this.withLog) this.sqlLog(sql);
-        //this.sqlLog(sql);
+        if(this.withLog) this.sqlLog(sql);
+        this.sqlLog(sql);
         this.connection.getConnection(function(error,connection){
             if(error) throw(error);
             sql = sql.replace(/#@/g,appConf('database.Mysql.prefixed'));
