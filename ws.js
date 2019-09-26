@@ -33,7 +33,6 @@ function ws(request){
 	//定义req，res对象
 	var req = res = connection;
 	connection.curCliId = currentConnectId;
-	
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
             //将message.utr8Data对象重组，让其与e框架兼容
@@ -58,6 +57,7 @@ function ws(request){
 			//后面逻辑通过全局方法 uni2cli(unid)获取客户端连接对象
 			if(req.body.unid) uniClientId(req.body.unid, currentConnectId);
             //执行处理程序
+			res.render = connection.json;
             wsProcess(req,res);
         }else if (message.type === 'binary') {
             console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
