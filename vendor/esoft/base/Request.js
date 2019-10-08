@@ -148,7 +148,6 @@ function Request(req){
     }
     
     this.processPOST = function(objExten){
-        console.log("POST");
         var err = {};
         if(typeof this.param != 'string'){
             err = {err:1,infor:'请求参数应该是字符串'};
