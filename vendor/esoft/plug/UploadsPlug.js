@@ -18,7 +18,7 @@ function UploadsPlug(data){
      */
     this.jsVar = function(code){
         if(!data) return code;
-        var addCode = "<script>var data = JSON.parse('" + JSON.stringify(data) + "');";
+        var addCode = "<script>var cropperData = JSON.parse('" + JSON.stringify(data) + "');";
         return code.replace('<script>',addCode);
     }
 
@@ -163,24 +163,24 @@ function UploadsPlug(data){
 
             //参数设置项
             var option = {
-                aspectRatio: data.aspectRatio, //默认比例
-                viewMode: data.viewMode,
-                preview: data.preview, //预览视图
-                guides: data.guides, //裁剪框的虚线(九宫格)
-                autoCropArea: data.autoCropArea, //0-1之间的数值，定义自动剪裁区域的大小，默认0.8
-                movable: data.movable, //是否允许移动图片
-                dragCrop: data.dragCrop, //是否允许移除当前的剪裁框，并通过拖动来新建一个剪裁框区域
-                movable: data.movable, //是否允许移动剪裁框
-                resizable: data.resizable, //是否允许改变裁剪框的大小
-                zoomable: data.zoomable, //是否允许缩放图片大小
-                mouseWheelZoom: data.mouseWheelZoom, //是否允许通过鼠标滚轮来缩放图片
-                touchDragZoom: data.touchDragZoom, //是否允许通过触摸移动来缩放图片
-                rotatable: data.rotatable, //是否允许旋转图片
-                responsive: data.responsive,
+                aspectRatio: cropperData.aspectRatio, //默认比例
+                viewMode: cropperData.viewMode,
+                preview: cropperData.preview, //预览视图
+                guides: cropperData.guides, //裁剪框的虚线(九宫格)
+                autoCropArea: cropperData.autoCropArea, //0-1之间的数值，定义自动剪裁区域的大小，默认0.8
+                movable: cropperData.movable, //是否允许移动图片
+                dragCrop: cropperData.dragCrop, //是否允许移除当前的剪裁框，并通过拖动来新建一个剪裁框区域
+                movable: cropperData.movable, //是否允许移动剪裁框
+                resizable: cropperData.resizable, //是否允许改变裁剪框的大小
+                zoomable: cropperData.zoomable, //是否允许缩放图片大小
+                mouseWheelZoom: cropperData.mouseWheelZoom, //是否允许通过鼠标滚轮来缩放图片
+                touchDragZoom: cropperData.touchDragZoom, //是否允许通过触摸移动来缩放图片
+                rotatable: cropperData.rotatable, //是否允许旋转图片
+                responsive: cropperData.responsive,
                 crop: function(e) {
                     // 输出结果数据裁剪图像。
                 },
-                url: data.url,
+                url: cropperData.url,
             }
 
             //弹出图片裁剪框
