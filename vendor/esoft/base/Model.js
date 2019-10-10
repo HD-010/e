@@ -95,6 +95,12 @@ function Model(req) {
 	 * @param {Object} callback
 	 */
     this.upload = function(obj){
+		if(!obj.req.files) {
+			return  obj.res.end( JSON.stringify( {
+						state   : 0,
+						message : 'File uploaded faild',
+					} ) );
+		}
 		//自定义文件上传处理是程序
 		if(typeof obj.callback == 'function') return obj.callback(obj.req.files);
         console.log('上传的文件信息:',obj.req.files);  // 上传的文件信息

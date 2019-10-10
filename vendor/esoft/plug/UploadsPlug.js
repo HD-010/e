@@ -40,17 +40,23 @@ function UploadsPlug(data){
      */
     this.normalAsync = this._TEXTJsVar(function(){/*
         <script>
+			var normalData = cropperData;
+			normalData.successCallback = normalData.successCallback || function(){};
+			normalData.faileCallback = normalData.faileCallback || function(){};
+			normalData.uploading = normalData.uploading || function(){};
+			
             var uploading = false;
-            $(data.control).on("change", function(){
+            $(normalData.control).on("change", function(){
+				eval((normalData.uploading + '(this)'))
                 if(uploading){
                     alert("文件正在上传中，请稍候");
                     return false;
                 }
                 $.ajax({
-                    url: data.url,
+                    url: normalData.url,
                     type: 'POST',
                     cache: false,
-                    data: new FormData($(data.form)[0]),
+                    data: new FormData($(normalData.form)[0]),
                     processData: false,
                     contentType: false,
                     dataType:"json",
@@ -59,12 +65,12 @@ function UploadsPlug(data){
                     },
                     success : function(data) {
                         console.log("上传文件信息：",data);
-                        try{
-                            results.state ? 
-                            eval((data.successCallback + '(results)')) :
-                            eval((data.faileCallback + '(results)'));
-                        }catch(err){throw(err)}
                         uploading = false;
+                        try{
+                            data.state ? 
+                            eval((normalData.successCallback + '(data)')) :
+                            eval((normalData.faileCallback + '(data)'));
+                        }catch(err){throw(err)}
                     }
                 });
             });
