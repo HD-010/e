@@ -41,6 +41,7 @@ function Mysql(){
     this.syncSelect = this.syncInsert = this.syncUpdate = this.syncDelete = this.syncQuery = function(sql){
         return new Promise(resolve =>{
             this.query(sql, (error, results, fields) => {
+				log("----------------------------------------------::",sql,"::----------------------------------------------");
                 var data = {
                     error: error ? 1 : 0,
                     results: results,
