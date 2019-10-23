@@ -41,7 +41,6 @@ function Mysql(){
     this.syncSelect = this.syncInsert = this.syncUpdate = this.syncDelete = this.syncQuery = function(sql){
         return new Promise(resolve =>{
             this.query(sql, (error, results, fields) => {
-				log("----------------------------------------------::",sql,"::----------------------------------------------");
                 var data = {
                     error: error ? 1 : 0,
                     results: results,
@@ -130,7 +129,7 @@ function Mysql(){
         return await this.syncSelect(sql);
         
     }
-
+	
     /**
      * 保存数据到表：方法用于修改记录，增加记录或增加字段并增加或修改记录
      * params= {
@@ -259,6 +258,22 @@ function Mysql(){
         }
     }
 
+	/**
+	 * 同步设置数据
+	 * @param {Object} params
+	 */
+	this.syncSet = async function(params){
+		return new Promise(resolve => {
+			this.set(params,(error, results, fields) => {
+				var data = {
+				    error: error ? 1 : 0,
+				    results: results,
+				    fields: fields
+				}
+				resolve(data);
+			});
+		})
+	}
 
 
     /**

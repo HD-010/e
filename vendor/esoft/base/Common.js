@@ -188,6 +188,34 @@ Common.prototype.sessionID = function(){
     return this.req.sessionID;
 }
 
+/**
+ * 返回数据封装error
+ */
+Common.prototype.err = function(msg,uri){
+	var data = {
+		error: 1,
+		message: msg || ''
+	}
+	if(uri) data.uri = uri;
+	
+	return data;
+}
+
+/**
+ * 返回数据封装success
+ */
+Common.prototype.suc = function(msg,dat,uri){
+	if(typeof dat == 'string') {
+		data = null;
+		uri = dat;
+	}
+	var data = {error: 0};
+	if(msg) data.message = msg;
+	if(dat) data.data = dat;
+	if(uri) data.uri = uri;
+	
+	return data;
+}
 
 /**
  ========================以下方法不用于业务调用=========================

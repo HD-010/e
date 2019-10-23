@@ -148,6 +148,7 @@ function MysqlStruct(){
             for (var i in this.struct[j]) {
                 check = this.struct[j][i];
                 if((typeof check == 'object') && (check != null)) this.struct[j][i] = dateFormate('%Y-%m-%d %H:%M:%S',new Date(check));
+				if(typeof check == 'undefined') this.struct[j][i] = '';
                 value += this.sqlString(this.struct[j][i]) ?
                 (",'" + trim(this.struct[j][i]) + "'"): 
                 ("," + this.struct[j][i]);
