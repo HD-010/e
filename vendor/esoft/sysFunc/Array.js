@@ -204,3 +204,4 @@ global.cleanNull = function(array){
 	}
 	return temArr;
 }
+

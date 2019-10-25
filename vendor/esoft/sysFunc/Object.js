@@ -67,3 +67,21 @@ global.queryresultKeyValue = function(obj, key) {
 
     return tem;
 }
+
+/**
+ * 该方法用于从对象属性的排列顺序中获取列表（达到将对象属性重命名的效果）
+ * 比如将obj 的属性依次按照 ["error", "data", "message"]组装
+ * 调用：objList(obj, ["error", "data", "message"])
+ */
+global.objList = function(obj, keyArr){
+	var i = 0,
+	tem = {};
+	for(var a in obj){
+		if(i >= keyArr.length) break;
+		if(!keyArr[i]) continue;
+		tem[keyArr[i]] = obj[a];
+		i++;
+	}
+	
+	return tem;
+}
