@@ -48,7 +48,9 @@ function isRel(req){
 
 /**
  * 根据用户id获取客户端对象
- * @param {Object} uniId    
+ * @param {Object} uniId
+ * 如果uniId为空，则返回所有客户端连接的集合
+ * 如果uniId为真，则返回uniId对应的连接
  */
 global.uni2cli = function(uniId){
 	if(!uniId) return Object.values(clients);

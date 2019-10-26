@@ -129,6 +129,20 @@ Controler.prototype.go = function(){
 }
 
 /**
+ * websocket向客户端发送信息
+ * @param {Object} uri
+ */
+Controler.prototype.sendClients = function(data, clientsId){
+	if(!clientsId || clientsId.constructor.name != 'Array'){
+		return this.renderJson(data);
+	}
+	clientsId.forEach(function(o, i){
+		var client = uni2cli(o);
+		if(client) client.render(data);
+	})
+}
+
+/**
  * 重定向
  */
 Controler.prototype.redirect = function(uri){
