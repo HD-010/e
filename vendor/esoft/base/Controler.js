@@ -133,6 +133,7 @@ Controler.prototype.go = function(){
  * @param {Object} uri
  */
 Controler.prototype.sendClients = function(data, clientsId){
+	log("==================IDtype:",typeof clientsId, "==================ID:",clientsId);
 	data = data || {error: 1, message: "没有设置返回数据...", data: []};
 	if(!clientsId || clientsId.constructor.name != 'Array'){
 		return this.renderJson(data);
